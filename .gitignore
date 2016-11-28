@@ -35,6 +35,8 @@ src/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/vcs.xml
+.idea
+/.idea
 
 # Sensitive or high-churn files:
 .idea/dataSources/
@@ -111,3 +113,4 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 CTestTestfile.cmake
+/cmake-build-debug/
