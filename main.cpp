@@ -2,8 +2,20 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+
+
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "Inner");
+    boost::property_tree::ptree root;
+    boost::property_tree::read_json("json/main.json", root);
+
+    auto windowObj = root.get_child("window");
+    auto height = windowObj.get<int>("height");
+    auto width = windowObj.get<int>("width");
+    auto title = windowObj.get<std::string>("title");
+
+    sf::RenderWindow window(sf::VideoMode(width, height), title);
     bool running = true;
     sf::Event event;
 

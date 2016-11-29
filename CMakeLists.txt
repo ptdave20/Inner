@@ -17,3 +17,8 @@ if (SFML_FOUND)
     target_link_libraries(Inner ${SFML_LIBRARIES})
 endif ()
 
+find_package(Boost COMPONENTS system filesystem REQUIRED)
+if (BOOST_FOUND)
+    include_directories(${BOOST_INCLUDE_DIR})
+    target_link_libraries(Inner ${BOOST_LIBRARIES})
+endif ()
