@@ -1,0 +1,6 @@
+[submodule "libs/Selene"]
+	path = libs/Selene
+	url = https://github.com/jeremyong/Selene.git
+[submodule "libs/LuaBridge"]
+	path = libs/LuaBridge
+	url = https://github.com/vinniefalco/LuaBridge.git
