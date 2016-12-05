@@ -4,7 +4,8 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-
+#include <imgui.h>
+#include <imgui-SFML.h>
 
 int main() {
     boost::property_tree::ptree root;
@@ -19,11 +20,13 @@ int main() {
     bool running = true;
     sf::Event event;
 
-
+    ImGui::SFML::Init(window);
+    window.resetGLStates();
     sf::Clock clock;
     sf::Time time;
     while (running) {
         while (window.pollEvent(event)) {
+            ImGui::SFML::ProcessEvent(event);
             switch (event.type) {
                 case sf::Event::Closed:
                     running = false;
@@ -36,8 +39,18 @@ int main() {
         window.clear(sf::Color::Black);
         time = clock.restart();
 
+        ImGui::SFML::Update(window, time);
+
+        ImGui::Begin("Hello, world!");
+        ImGui::Button("Look at this pretty button");
+        ImGui::End();
+
+        ImGui::Render();
         window.display();
     }
+
+    ImGui::SFML::Shutdown();
+
 
     return 0;
 }

@@ -14,10 +14,14 @@
 #include <string>
 #include <selene.h>
 
+#include <map>
+#include <memory>
+
 using namespace sel;
 
 class Scene {
 public:
+    //CONSTRUCTOR
     Scene(std::string _name) {
         name = name;
     }
@@ -61,13 +65,29 @@ public:
     void setName(std::string _name) {
         name = _name;
     }
+
+    // RESOURCE CONTROLS
+    bool loadTexture(std::string name, std::string file) {
+        std::shared_ptr<sf::Texture> t;
+        if (!t->loadFromFile(file)) {
+            return false;
+        }
+        textureResources[name] = t.shared_ptr();
+        return true;
+    }
+
+    void update(const sf::Time &time) {
+
+    }
 private:
     sf::Music music;
     std::string name;
+    std::map<std::string, std::shared_ptr<sf::Texture>> textureResources;
 };
 
 void SceneLua(sel::State &state) {
     state["Scene"].SetClass<Scene, std::string>(
+
             // MUSIC CONTROLS
             "loadMusic", &Scene::loadMusic,
             "startMusic", &Scene::startMusic,
@@ -76,9 +96,13 @@ void SceneLua(sel::State &state) {
             "getMusicVolume", &Scene::getMusicVolume,
             "setMusicLoop", &Scene::setMusicLoop,
             "getMusicLoop", &Scene::getMusicLoop,
-            //NAME CONTROLS
+
+            // NAME CONTROLS
             "getName", &Scene::getName,
-            "setName", &Scene::setName
+            "setName", &Scene::setName,
+
+            // LOAD RESOURCES
+            "loadTexture", &Scene::loadTexture
     );
 }
 
