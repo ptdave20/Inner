@@ -5,7 +5,8 @@
   "window": {
     "width": 1280,
     "height": 720,
-    "title": "Inner"
+    "title": "Inner",
+    "debug": true
   },
   "scenes": [],
   "items": [],
