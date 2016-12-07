@@ -13,6 +13,7 @@
 #include "json/json.h"
 #include "Debug.h"
 #include <fstream>
+#include "Scene.h"
 
 class Window {
 public:
@@ -59,6 +60,13 @@ public:
             if (w["debug"].isBool()) {
                 debug = w["debug"].asBool();
             }
+        }
+
+        if (root["initScene"].isString()) {
+            std::shared_ptr<Scene> initScene(new Scene());
+            initScene->openFile(root["initScene"].asString());
+            std::cout << initScene->getName() << " loaded" << std::endl;
+            sceneStack.push_back(initScene);
         }
 
         in.close();
@@ -130,6 +138,7 @@ private:
     sf::VideoMode windowMode;
     bool debug;
     unsigned int style;
+    std::vector<std::shared_ptr<Scene>> sceneStack;
 };
 
 

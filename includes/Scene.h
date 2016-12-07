@@ -10,23 +10,22 @@
 #include "Map.h"
 #include "Entity.h"
 #include "Tile.h"
+#include "Sprite.h"
 
 #include <string>
-#include <selene.h>
 
 #include <map>
 #include <memory>
-
-#include <json/json.h>
+#include "json/json.h"
 #include <fstream>
-
-using namespace sel;
+#include <ios>
 
 class Scene {
 public:
     //CONSTRUCTOR
     Scene() {
     }
+
 
     bool openFile(const std::string &file) {
         std::ifstream in(file, std::ifstream::binary);
@@ -63,6 +62,12 @@ public:
         if (!vType.empty() && vType.isString()) {
             // Set our scene type {Menu , map, etc..}
         }
+
+        if (!vMenus.empty() && vMenus.isArray()) {
+            // Load our menu options and prepare actions
+        }
+        in.close();
+        return true;
     }
 
     // MUSIC CONTROLS
@@ -110,7 +115,7 @@ public:
         if (!t->loadFromFile(file)) {
             return false;
         }
-        resources[name] = t.shared_ptr();
+        resources[name] = t;
         return true;
     }
 
@@ -121,7 +126,7 @@ private:
     sf::Music music;
     std::string name, type;
     std::map<std::string, std::shared_ptr<sf::Texture>> resources;
-    std::map<std::string, std::shared_ptr<sf::Sprite>> resSprites;
+    std::map<std::string, std::shared_ptr<Sprite>> resSprites;
     std::map<std::string, std::shared_ptr<sf::Music>> resMusic;
 };
 

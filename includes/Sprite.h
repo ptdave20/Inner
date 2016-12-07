@@ -9,16 +9,32 @@
 #include "json/json.h"
 #include "Scene.h"
 
+struct SpriteAnimation {
+    std::string name;
+    std::vector<sf::IntRect> rect;
+};
+
 class Sprite {
 public:
-    Sprite(const Scene &scene, const Json::Value &value) {
+    void setName(std::string &_name) {
+        name = _name;
+    }
 
+    const std::string &getName() {
+        return name;
+    }
+
+    void addAnimation(std::string name) {
+        SpriteAnimation anim;
+        anim.name = name;
+
+        animations.push_back(anim);
     }
 
 private:
     std::string name;
-    sf::FloatRect rect;
     sf::Sprite sprite;
+    std::vector<SpriteAnimation> animations;
 };
 
 

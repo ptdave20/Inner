@@ -1,0 +1,22 @@
+{
+  "name": "Main Menu",
+  "type": "menu",
+  "menus": [
+    {
+      "name": "New Game",
+      "onSelect": {}
+    },
+    {
+      "name": "Load Game",
+      "onSelect": {}
+    },
+    {
+      "name": "Options",
+      "onSelect": {}
+    },
+    {
+      "name": "Quit",
+      "onSelect": {}
+    }
+  ]
+}
