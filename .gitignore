@@ -117,6 +117,8 @@ CTestTestfile.cmake
 /libs/imguisfml/
 /libs/imgui/
 /libs/jsoncpp/
-/libs/LuaBridge/
-/libs/Selene/
 /res/imgui.ini
+!/res/
+!/res/json/
+!/res/music/
+!/res/scenes/main.json

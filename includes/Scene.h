@@ -19,6 +19,99 @@
 #include "json/json.h"
 #include <fstream>
 #include <ios>
+#include <locale>
+
+class OnAction {
+private:
+    bool done;
+public:
+    bool isDone() const {
+        return done;
+    }
+
+    void setDone(bool done) {
+        OnAction::done = done;
+    }
+
+    const std::string &getDo_what() const {
+        return do_what;
+    }
+
+    void setDo_what(const std::string &do_what) {
+        OnAction::do_what = do_what;
+    }
+
+    const std::map<std::string, std::string> &getActions() const {
+        return actions;
+    }
+
+    void setActions(const std::map<std::string, std::string> &actions) {
+        OnAction::actions = actions;
+    }
+
+private:
+    std::string do_what;
+    std::map<std::string, std::string> actions;
+};
+
+class MenuOption {
+public:
+    const std::string &getText() const {
+        return text;
+    }
+
+    void setText(const std::string &text) {
+        MenuOption::text = text;
+    }
+
+    const std::vector<OnAction> &getOnSelect() const {
+        return onSelect;
+    }
+
+    void setOnSelect(const std::vector<OnAction> &onSelect) {
+        MenuOption::onSelect = onSelect;
+    }
+
+    const std::vector<OnAction> &getOnMouseOver() const {
+        return onMouseOver;
+    }
+
+    void setOnMouseOver(const std::vector<OnAction> &onMouseOver) {
+        MenuOption::onMouseOver = onMouseOver;
+    }
+
+    const std::vector<OnAction> &getOnMouseLeave() const {
+        return onMouseLeave;
+    }
+
+    void setOnMouseLeave(const std::vector<OnAction> &onMouseLeave) {
+        MenuOption::onMouseLeave = onMouseLeave;
+    }
+
+    const std::vector<OnAction> &getOnMouseClick() const {
+        return onMouseClick;
+    }
+
+    void setOnMouseClick(const std::vector<OnAction> &onMouseClick) {
+        MenuOption::onMouseClick = onMouseClick;
+    }
+
+    const std::vector<OnAction> &getOnMouseRelease() const {
+        return onMouseRelease;
+    }
+
+    void setOnMouseRelease(const std::vector<OnAction> &onMouseRelease) {
+        MenuOption::onMouseRelease = onMouseRelease;
+    }
+
+private:
+    std::string text;
+    std::vector<OnAction> onSelect;
+    std::vector<OnAction> onMouseOver;
+    std::vector<OnAction> onMouseLeave;
+    std::vector<OnAction> onMouseClick;
+    std::vector<OnAction> onMouseRelease;
+};
 
 class Scene {
 public:
@@ -51,6 +144,14 @@ public:
             setName(vName.asString());
         }
 
+        if (vType.isString()) {
+            auto t = vType.asString();
+            std::locale loc;
+            for (std::string::size_type i = 0; i < t.length(); ++i)
+                std::cout << std::tolower(t[i], loc);
+            type = t;
+        }
+
         if (!vRes.empty() && vRes.isArray()) {
             // Go through each resource and load it into our data
         }
@@ -63,8 +164,18 @@ public:
             // Set our scene type {Menu , map, etc..}
         }
 
-        if (!vMenus.empty() && vMenus.isArray()) {
+        if (!vMenus.empty() && vMenus.isArray() && type == "menu") {
             // Load our menu options and prepare actions
+            for (auto &menu : vMenus) {
+                // Needs to be object, otherwise continue to the next
+                if (!menu.isObject())
+                    continue;
+                MenuOption option;
+                if (menu["text"].isString()) {
+                    option.text = menu["text"].asString();
+                }
+                menuOptions.push_back(option);
+            }
         }
         in.close();
         return true;
@@ -128,6 +239,7 @@ private:
     std::map<std::string, std::shared_ptr<sf::Texture>> resources;
     std::map<std::string, std::shared_ptr<Sprite>> resSprites;
     std::map<std::string, std::shared_ptr<sf::Music>> resMusic;
+    std::vector<MenuOption> menuOptions;
 };
 
 #endif //INNER_SCENE_H

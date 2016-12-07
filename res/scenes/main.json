@@ -3,20 +3,20 @@
   "type": "menu",
   "menus": [
     {
-      "name": "New Game",
-      "onSelect": {}
+      "text": "New Game",
+      "onSelect": []
     },
     {
-      "name": "Load Game",
-      "onSelect": {}
+      "text": "Load Game",
+      "onSelect": []
     },
     {
-      "name": "Options",
-      "onSelect": {}
+      "text": "Options",
+      "onSelect": []
     },
     {
-      "name": "Quit",
-      "onSelect": {}
+      "text": "Quit",
+      "onSelect": []
     }
   ]
 }
