@@ -10,3 +10,6 @@
 [submodule "libs/imguisfml"]
 	path = libs/imguisfml
 	url = https://github.com/eliasdaler/imgui-sfml.git
+[submodule "libs/jsoncpp"]
+	path = libs/jsoncpp
+	url = https://github.com/open-source-parsers/jsoncpp.git

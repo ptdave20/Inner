@@ -116,3 +116,7 @@ CTestTestfile.cmake
 /cmake-build-debug/
 /libs/imguisfml/
 /libs/imgui/
+/libs/jsoncpp/
+/libs/LuaBridge/
+/libs/Selene/
+/res/imgui.ini

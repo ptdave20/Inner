@@ -17,15 +17,53 @@
 #include <map>
 #include <memory>
 
+#include <json/json.h>
+#include <fstream>
+
 using namespace sel;
 
 class Scene {
 public:
     //CONSTRUCTOR
-    Scene(std::string _name) {
-        name = name;
+    Scene() {
     }
 
+    bool openFile(const std::string &file) {
+        std::ifstream in(file, std::ifstream::binary);
+        Json::Reader reader;
+        Json::Value root;
+        if (!in.is_open()) {
+            return false;
+        }
+
+        auto success = reader.parse(in, root);
+        if (!success) {
+            return false;
+        }
+
+        auto vName = root["name"];
+        auto vRes = root["resources"];
+        auto vSprites = root["sprites"];
+        auto vTriggers = root["triggers"];
+        auto vType = root["type"];
+        auto vMenus = root["menus"];
+
+        if (!vName.empty() && vName.isString()) {
+            setName(vName.asString());
+        }
+
+        if (!vRes.empty() && vRes.isArray()) {
+            // Go through each resource and load it into our data
+        }
+
+        if (!vSprites.empty() && vRes.isArray()) {
+            // Go through all the sprites and prepare it
+        }
+
+        if (!vType.empty() && vType.isString()) {
+            // Set our scene type {Menu , map, etc..}
+        }
+    }
 
     // MUSIC CONTROLS
     void loadMusic(std::string file) {
@@ -72,7 +110,7 @@ public:
         if (!t->loadFromFile(file)) {
             return false;
         }
-        textureResources[name] = t.shared_ptr();
+        resources[name] = t.shared_ptr();
         return true;
     }
 
@@ -81,30 +119,10 @@ public:
     }
 private:
     sf::Music music;
-    std::string name;
-    std::map<std::string, std::shared_ptr<sf::Texture>> textureResources;
+    std::string name, type;
+    std::map<std::string, std::shared_ptr<sf::Texture>> resources;
+    std::map<std::string, std::shared_ptr<sf::Sprite>> resSprites;
+    std::map<std::string, std::shared_ptr<sf::Music>> resMusic;
 };
-
-void SceneLua(sel::State &state) {
-    state["Scene"].SetClass<Scene, std::string>(
-
-            // MUSIC CONTROLS
-            "loadMusic", &Scene::loadMusic,
-            "startMusic", &Scene::startMusic,
-            "stopMusic", &Scene::stopMusic,
-            "setMusicVolume", &Scene::setMusicVolume,
-            "getMusicVolume", &Scene::getMusicVolume,
-            "setMusicLoop", &Scene::setMusicLoop,
-            "getMusicLoop", &Scene::getMusicLoop,
-
-            // NAME CONTROLS
-            "getName", &Scene::getName,
-            "setName", &Scene::setName,
-
-            // LOAD RESOURCES
-            "loadTexture", &Scene::loadTexture
-    );
-}
-
 
 #endif //INNER_SCENE_H

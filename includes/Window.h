@@ -5,13 +5,14 @@
 #ifndef INNER_WINDOW_H
 #define INNER_WINDOW_H
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <imgui.h>
 #include <imgui-SFML.h>
+#include "json/json.h"
+#include "Debug.h"
+#include <fstream>
 
 class Window {
 public:
@@ -22,32 +23,45 @@ public:
         title = "Inner";
         style = sf::Style::Default;
         debug = false;
-
-        debugSceneWindow = false;
     }
 
-    void openConfig(std::string file) {
-        boost::property_tree::ptree root;
-        boost::property_tree::read_json(file, root);
+    void openConfig(const std::string &file) {
+        std::ifstream in(file, std::ifstream::binary);
+        if (!in.is_open()) {
+            return;
+        }
 
-        auto windowObj = root.get_child("window");
+        Json::Reader reader;
+        Json::Value root;
 
-        auto optHeight = windowObj.get_optional<int>("height");
-        auto optWidth = windowObj.get_optional<int>("width");
-        auto optTitle = windowObj.get_optional<std::string>("title");
-        auto optFullscreen = windowObj.get_optional<bool>("fullscreen");
-        auto optDebug = windowObj.get_optional<bool>("debug");
+        if (!reader.parse(in, root)) {
+            in.close();
+            return;
+        }
 
-        if (optHeight)
-            windowMode.height = windowObj.get<int>("height");
-        if (optWidth)
-            windowMode.width = windowObj.get<int>("width");
-        if (optTitle)
-            title = windowObj.get<std::string>("title");
-        if (optFullscreen && optFullscreen.get())
-            style |= sf::Style::Fullscreen;
-        if (optDebug)
-            debug = optDebug.get();
+        if (!root["window"].empty() && root["window"].isObject()) {
+            auto w = root["window"];
+            if (w["height"].isInt()) {
+                windowMode.height = w["height"].asInt();
+            }
+            if (w["width"].isInt()) {
+                windowMode.width = w["width"].asInt();
+            }
+            if (w["title"].isString()) {
+                title = w["title"].asString();
+            }
+            if (w["fullscreen"].isBool()) {
+                if (w["fullscreen"].asBool())
+                    style |= sf::Style::Fullscreen;
+                else
+                    style ^= sf::Style::Fullscreen;
+            }
+            if (w["debug"].isBool()) {
+                debug = w["debug"].asBool();
+            }
+        }
+
+        in.close();
 
     }
 
@@ -59,25 +73,11 @@ public:
         }
     }
 
-
-    void debugDisplay() {
-        ImGui::Begin("Inner tools");
-        if (ImGui::Button("Toggle Scenes")) {
-            debugSceneWindow = !debugSceneWindow;
-        }
-        ImGui::End();
-
-        if (debugSceneWindow) {
-            ImGui::Begin("Scenes");
-
-            ImGui::End();
-        }
-    }
-
     void run() {
         sf::Event event;
         sf::Clock clock;
         sf::Time time;
+        Debug _debug;
         bool run = true;
 
         while (run) {
@@ -109,9 +109,10 @@ public:
             window.clear(sf::Color::Black);
 
             if (debug) {
+
                 ImGui::SFML::Update(window, time);
 
-                debugDisplay();
+                _debug.run();
 
                 ImGui::Render();
             }
@@ -129,9 +130,6 @@ private:
     sf::VideoMode windowMode;
     bool debug;
     unsigned int style;
-
-
-    bool debugSceneWindow;
 };
 
 
