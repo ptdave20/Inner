@@ -4,18 +4,22 @@
   "menus": [
     {
       "text": "New Game",
+      "font": {},
       "onSelect": []
     },
     {
       "text": "Load Game",
+      "font": {},
       "onSelect": []
     },
     {
       "text": "Options",
+      "font": {},
       "onSelect": []
     },
     {
       "text": "Quit",
+      "font": {},
       "onSelect": []
     }
   ],

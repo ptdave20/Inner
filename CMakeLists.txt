@@ -20,7 +20,7 @@ if (OPENGL_FOUND)
 endif ()
 
 set(IMGUI_SOURCE_FILES ${CMAKE_SOURCE_DIR}/libs/imgui/imgui.cpp ${CMAKE_SOURCE_DIR}/libs/imgui/imgui_draw.cpp ${CMAKE_SOURCE_DIR}/libs/imguisfml/imgui-SFML.cpp)
-set(SOURCE_FILES main.cpp includes/Entity.h includes/Tile.h includes/Map.h includes/Scene.h ${IMGUI_SOURCE_FILES} includes/Window.h includes/Debug.h includes/Sprite.h includes/jsoncpp.cpp includes/Resource.h)
+set(SOURCE_FILES main.cpp includes/Entity.h includes/Tile.h includes/Map.h includes/Scene.h ${IMGUI_SOURCE_FILES} includes/Window.h includes/Debug.h includes/Sprite.h includes/jsoncpp.cpp includes/Resource.h includes/Action.h includes/Menu.h)
 
 add_executable(Inner ${SOURCE_FILES})
 

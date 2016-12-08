@@ -6,12 +6,15 @@
 #define INNER_SCENE_H
 
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "Map.h"
 #include "Entity.h"
 #include "Tile.h"
 #include "Sprite.h"
 #include "Resource.h"
+#include "Action.h"
+#include "Menu.h"
 
 #include <string>
 
@@ -22,96 +25,8 @@
 #include <ios>
 #include <locale>
 
-class OnAction {
-private:
-    bool done;
-public:
-    bool isDone() const {
-        return done;
-    }
 
-    void setDone(bool done) {
-        OnAction::done = done;
-    }
 
-    const std::string &getDo_what() const {
-        return do_what;
-    }
-
-    void setDo_what(const std::string &do_what) {
-        OnAction::do_what = do_what;
-    }
-
-    const std::map<std::string, std::string> &getActions() const {
-        return actions;
-    }
-
-    void setActions(const std::map<std::string, std::string> &actions) {
-        OnAction::actions = actions;
-    }
-private:
-    std::string do_what;
-    std::map<std::string, std::string> actions;
-};
-
-class MenuOption {
-public:
-    const std::string &getText() const {
-        return text;
-    }
-
-    void setText(const std::string &text) {
-        MenuOption::text = text;
-    }
-
-    const std::vector<OnAction> &getOnSelect() const {
-        return onSelect;
-    }
-
-    void setOnSelect(const std::vector<OnAction> &onSelect) {
-        MenuOption::onSelect = onSelect;
-    }
-
-    const std::vector<OnAction> &getOnMouseOver() const {
-        return onMouseOver;
-    }
-
-    void setOnMouseOver(const std::vector<OnAction> &onMouseOver) {
-        MenuOption::onMouseOver = onMouseOver;
-    }
-
-    const std::vector<OnAction> &getOnMouseLeave() const {
-        return onMouseLeave;
-    }
-
-    void setOnMouseLeave(const std::vector<OnAction> &onMouseLeave) {
-        MenuOption::onMouseLeave = onMouseLeave;
-    }
-
-    const std::vector<OnAction> &getOnMouseClick() const {
-        return onMouseClick;
-    }
-
-    void setOnMouseClick(const std::vector<OnAction> &onMouseClick) {
-        MenuOption::onMouseClick = onMouseClick;
-    }
-
-    const std::vector<OnAction> &getOnMouseRelease() const {
-        return onMouseRelease;
-    }
-
-    void setOnMouseRelease(const std::vector<OnAction> &onMouseRelease) {
-        MenuOption::onMouseRelease = onMouseRelease;
-    }
-
-private:
-    std::string text;
-    std::vector<OnAction> onSelect;
-    std::vector<OnAction> onMouseOver;
-    std::vector<OnAction> onMouseLeave;
-    std::vector<OnAction> onMouseClick;
-    std::vector<OnAction> onMouseRelease;
-};
 
 class Scene {
 public:
@@ -199,9 +114,16 @@ public:
                 if (type == "texture") {
                     if (loadTexture(name, file)) {
                         std::cout << "Loaded texture resource : " << name << std::endl;
+                        continue;
                     }
                 }
 
+                if (type == "font") {
+                    if (loadFont(name, file)) {
+                        std::cout << "Loaded font resource : " << name << std::endl;
+                        continue;
+                    }
+                }
 
             }
         }
@@ -267,6 +189,15 @@ public:
         return true;
     }
 
+    bool loadFont(std::string name, std::string file) {
+        std::shared_ptr<sf::Font> t(new sf::Font);
+        if (!t->loadFromFile(file)) {
+            return false;
+        }
+        resFont[name] = t;
+        return true;
+    }
+
     void update(const sf::Time &time) {
 
     }
@@ -276,6 +207,7 @@ private:
     std::map<std::string, std::shared_ptr<sf::Texture>> resTextures;
     std::map<std::string, std::shared_ptr<Sprite>> resSprites;
     std::map<std::string, std::shared_ptr<sf::Music>> resMusic;
+    std::map<std::string, std::shared_ptr<sf::Font>> resFont;
     std::vector<MenuOption> menuOptions;
 };
 
