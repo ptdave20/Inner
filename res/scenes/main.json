@@ -18,5 +18,12 @@
       "text": "Quit",
       "onSelect": []
     }
+  ],
+  "resources": [
+    {
+      "name": "bgMusic",
+      "file": "music/Unseen Horrors.ogg",
+      "type": "music"
+    }
   ]
 }

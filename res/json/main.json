@@ -8,7 +8,5 @@
     "title": "Inner",
     "debug": true
   },
-  "initScene": "scenes/main.json",
-  "items": [],
-  "textures": []
+  "initScene": "scenes/main.json"
 }

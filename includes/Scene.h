@@ -11,6 +11,7 @@
 #include "Entity.h"
 #include "Tile.h"
 #include "Sprite.h"
+#include "Resource.h"
 
 #include <string>
 
@@ -48,7 +49,6 @@ public:
     void setActions(const std::map<std::string, std::string> &actions) {
         OnAction::actions = actions;
     }
-
 private:
     std::string do_what;
     std::map<std::string, std::string> actions;
@@ -134,7 +134,7 @@ public:
         }
 
         auto vName = root["name"];
-        auto vRes = root["resources"];
+        auto vRes = root["resTextures"];
         auto vSprites = root["sprites"];
         auto vTriggers = root["triggers"];
         auto vType = root["type"];
@@ -172,9 +172,37 @@ public:
                     continue;
                 MenuOption option;
                 if (menu["text"].isString()) {
-                    option.text = menu["text"].asString();
+                    option.setText(menu["text"].asString());
                 }
                 menuOptions.push_back(option);
+            }
+        }
+
+        if (root["resources"].isArray()) {
+            for (auto res : root["resources"]) {
+                // Needs to determine a type
+                if (!res["type"].isString() || !res["name"].isString() || !res["file"].isString()) {
+                    continue;
+                }
+
+                auto type = res["type"].asString();
+                auto name = res["name"].asString();
+                auto file = res["file"].asString();
+
+                if (type == "music") {
+                    if (loadMusic(name, file)) {
+                        std::cout << "Loaded music resource : " << name << std::endl;
+                        continue;
+                    }
+                }
+
+                if (type == "texture") {
+                    if (loadTexture(name, file)) {
+                        std::cout << "Loaded texture resource : " << name << std::endl;
+                    }
+                }
+
+
             }
         }
         in.close();
@@ -222,11 +250,20 @@ public:
 
     // RESOURCE CONTROLS
     bool loadTexture(std::string name, std::string file) {
-        std::shared_ptr<sf::Texture> t;
+        std::shared_ptr<sf::Texture> t(new sf::Texture);
         if (!t->loadFromFile(file)) {
             return false;
         }
-        resources[name] = t;
+        resTextures[name] = t;
+        return true;
+    }
+
+    bool loadMusic(std::string name, std::string file) {
+        std::shared_ptr<sf::Music> t(new sf::Music);
+        if (!t->openFromFile(file)) {
+            return false;
+        }
+        resMusic[name] = t;
         return true;
     }
 
@@ -236,7 +273,7 @@ public:
 private:
     sf::Music music;
     std::string name, type;
-    std::map<std::string, std::shared_ptr<sf::Texture>> resources;
+    std::map<std::string, std::shared_ptr<sf::Texture>> resTextures;
     std::map<std::string, std::shared_ptr<Sprite>> resSprites;
     std::map<std::string, std::shared_ptr<sf::Music>> resMusic;
     std::vector<MenuOption> menuOptions;
