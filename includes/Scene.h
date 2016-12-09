@@ -198,6 +198,23 @@ public:
         return true;
     }
 
+    std::vector<std::string> getTextureKeys() {
+        std::vector<std::string> keys;
+        for (const auto &k : resTextures) {
+            keys.push_back(k.first);
+        }
+        return keys;
+    }
+
+    std::vector<std::string> getMusicKeys() {
+        std::vector<std::string> keys;
+        for (const auto &k : resTextures) {
+            keys.push_back(k.first);
+            std::cout << k.first << std::endl;
+        }
+        return keys;
+    }
+
     void update(const sf::Time &time) {
 
     }
