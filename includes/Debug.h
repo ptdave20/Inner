@@ -34,48 +34,56 @@ public:
         ImGui::End();
 
         if (sceneWindow) {
-            static char sceneName[256];
-            static std::string selectedMusicText;
-            ImGui::Begin("Scenes");
-            ImGui::Combo("Select a scene", &sceneSelectedIndex, sceneFileString.c_str());
-
-            if (sceneLoadedIndex != sceneSelectedIndex) {
-                // Need to load a scene and prep for display
-                if (scene) {
-                    auto s = scene.release();
-                    delete s;
-                }
-
-                scene = std::unique_ptr<Scene>(new Scene());
-                scene->openFile(sceneFiles[sceneSelectedIndex].string());
-                sceneLoadedIndex = sceneSelectedIndex;
-
-                std::strcpy(sceneName, scene->getName().c_str());
-                selectedMusicText = convertStringArray(scene->getMusicKeys());
-            }
-
-            // Scene name
-            ImGui::InputText("Name", sceneName, 256);
-
-            ImGui::BeginGroup();
-            ImGui::Text("Texture Resources");
-
-            ImGui::EndGroup();
-
-            ImGui::BeginGroup();
-            ImGui::Text("Music Resources");
-            ImGui::Combo("", &sceneSelectedMusicIndex, selectedMusicText.c_str());
-            ImGui::EndGroup();
-
-            ImGui::BeginGroup();
-            ImGui::Text("Font Resources");
-            ImGui::EndGroup();
-
-            ImGui::End();
+            SceneWindowProc();
         }
     }
 
 private:
+    void SceneWindowProc() {
+        static char sceneName[256];
+        static std::string selectedMusicText;
+        ImGui::Begin("Scenes");
+        ImGui::Combo("Select a scene", &sceneSelectedIndex, sceneFileString.c_str());
+
+        if (sceneLoadedIndex != sceneSelectedIndex) {
+            // Need to load a scene and prep for display
+            if (scene) {
+                auto s = scene.release();
+                delete s;
+            }
+
+            scene = std::unique_ptr<Scene>(new Scene());
+            scene->openFile(sceneFiles[sceneSelectedIndex].string());
+            sceneLoadedIndex = sceneSelectedIndex;
+
+            std::strcpy(sceneName, scene->getName().c_str());
+            auto &resMusic = scene->getResMusic();
+            std::vector<std::string> songs;
+            for (const auto m : resMusic) {
+                songs.push_back(m.first);
+            }
+            selectedMusicText = convertStringArray(songs);
+        }
+
+        // Scene name
+        ImGui::InputText("Name", sceneName, 256);
+
+        ImGui::BeginGroup();
+        ImGui::Text("Texture Resources");
+
+        ImGui::EndGroup();
+
+        ImGui::BeginGroup();
+        ImGui::Text("Music Resources");
+        ImGui::Combo("", &sceneSelectedMusicIndex, selectedMusicText.c_str());
+        ImGui::EndGroup();
+
+        ImGui::BeginGroup();
+        ImGui::Text("Font Resources");
+        ImGui::EndGroup();
+
+        ImGui::End();
+    }
     void scanSceneFiles() {
         namespace fs = boost::filesystem;
         fs::path path("./scenes");
@@ -101,6 +109,7 @@ private:
         std::string ret = "";
         for (const auto &v : arr) {
             ret += v.c_str();
+
             ret += "\0";
         }
         return ret;

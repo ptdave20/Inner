@@ -224,6 +224,20 @@ private:
     std::map<std::string, std::shared_ptr<sf::Texture>> resTextures;
     std::map<std::string, std::shared_ptr<Sprite>> resSprites;
     std::map<std::string, std::shared_ptr<sf::Music>> resMusic;
+public:
+    const std::map<std::string, std::shared_ptr<sf::Texture>> &getResTextures() const {
+        return resTextures;
+    }
+
+    const std::map<std::string, std::shared_ptr<sf::Music>> &getResMusic() const {
+        return resMusic;
+    }
+
+    const std::map<std::string, std::shared_ptr<sf::Font>> &getResFont() const {
+        return resFont;
+    }
+
+private:
     std::map<std::string, std::shared_ptr<sf::Font>> resFont;
     std::vector<MenuOption> menuOptions;
 };
