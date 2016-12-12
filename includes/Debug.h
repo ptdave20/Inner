@@ -89,6 +89,7 @@ private:
             std::strcpy(sceneName, scene->getName().c_str());
             auto &resMusic = scene->getResMusic();
             songs.clear();
+            songs.push_back(std::string(" "));
             for (const auto m : resMusic) {
                 songs.push_back(m.first);
             }
@@ -103,7 +104,7 @@ private:
         ImGui::EndGroup();
 
 
-        ImGui::BeginChild("music_resources");
+        ImGui::BeginGroup();
         ImGui::Text("Music Resources");
         ImGui::Combo("", &sceneSelectedMusicIndex, songs);
         if (ImGui::Button("+##Add")) {
@@ -112,7 +113,7 @@ private:
         if (ImGui::Button("-##Delete")) {
             // Delete music resource
         }
-        ImGui::EndChild();
+        ImGui::EndGroup();
 
         ImGui::BeginGroup();
         ImGui::Text("Font Resources");
