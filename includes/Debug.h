@@ -5,7 +5,8 @@
 #ifndef INNER_DEBUG_H
 #define INNER_DEBUG_H
 
-#include <imgui.h>
+
+#include "imgui\imgui.h"
 #include <iostream>
 
 #include <boost/filesystem.hpp>
