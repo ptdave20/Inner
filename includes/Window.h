@@ -8,10 +8,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
-#include "imgui\imgui.h"
-#include "imgui\imgui-SFML.h"
-//#include <imgui.h>
-//#include <imgui-SFML.h>
+#include "imgui/imgui.h"
+#include "imgui/imgui-SFML.h"
 #include "json/json.h"
 #include "Debug.h"
 #include <fstream>
@@ -122,7 +120,7 @@ public:
 
                 ImGui::SFML::Update(window, time);
 
-                _debug.run();
+                _debug.run(time);
 
                 ImGui::Render();
             }

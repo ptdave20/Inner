@@ -6,11 +6,34 @@
 #define INNER_DEBUG_H
 
 
-#include "imgui\imgui.h"
+#include "imgui/imgui.h"
 #include <iostream>
 
 #include <boost/filesystem.hpp>
 #include "Scene.h"
+
+
+namespace ImGui {
+    static auto vector_getter = [](void *vec, int idx, const char **out_text) {
+        auto &vector = *static_cast<std::vector<std::string> *>(vec);
+        if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+        *out_text = vector.at(idx).c_str();
+        return true;
+    };
+
+    bool Combo(const char *label, int *currIndex, std::vector<std::string> &values) {
+        if (values.empty()) { return false; }
+        return Combo(label, currIndex, vector_getter,
+                     static_cast<void *>(&values), values.size());
+    }
+
+    bool ListBox(const char *label, int *currIndex, std::vector<std::string> &values) {
+        if (values.empty()) { return false; }
+        return ListBox(label, currIndex, vector_getter,
+                       static_cast<void *>(&values), values.size());
+    }
+
+}
 
 
 class Debug {
@@ -19,9 +42,12 @@ public:
         sceneWindow = false;
         sceneSelectedIndex = 0;
         sceneLoadedIndex = -1;
+        fps = "";
+        time = 0;
+        frames = 0;
     }
 
-    void run() {
+    void run(const sf::Time &u) {
         ImGui::Begin("Inner tools");
         if (ImGui::Button("Toggle Scenes")) {
             // Get a list of files in the scene directory
@@ -32,6 +58,9 @@ public:
             sceneLoadedIndex = -1;
             sceneLoadedMusicIndex = -1;
         }
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
+                    ImGui::GetIO().Framerate);
+
         ImGui::End();
 
         if (sceneWindow) {
@@ -43,8 +72,8 @@ private:
     void SceneWindowProc() {
         static char sceneName[256];
         static std::string selectedMusicText;
-        ImGui::Begin("Scenes");
-        ImGui::Combo("Select a scene", &sceneSelectedIndex, sceneFileString.c_str());
+        ImGui::Begin("Scenes", &sceneWindow);
+        ImGui::Combo("Select a scene", &sceneSelectedIndex, sceneFiles);
 
         if (sceneLoadedIndex != sceneSelectedIndex) {
             // Need to load a scene and prep for display
@@ -54,16 +83,15 @@ private:
             }
 
             scene = std::unique_ptr<Scene>(new Scene());
-            scene->openFile(sceneFiles[sceneSelectedIndex].string());
+            scene->openFile(sceneBoostFiles[sceneSelectedIndex].string());
             sceneLoadedIndex = sceneSelectedIndex;
 
             std::strcpy(sceneName, scene->getName().c_str());
             auto &resMusic = scene->getResMusic();
-            std::vector<std::string> songs;
+            songs.clear();
             for (const auto m : resMusic) {
                 songs.push_back(m.first);
             }
-            selectedMusicText = convertStringArray(songs);
         }
 
         // Scene name
@@ -74,10 +102,17 @@ private:
 
         ImGui::EndGroup();
 
-        ImGui::BeginGroup();
+
+        ImGui::BeginChild("music_resources");
         ImGui::Text("Music Resources");
-        ImGui::Combo("", &sceneSelectedMusicIndex, selectedMusicText.c_str());
-        ImGui::EndGroup();
+        ImGui::Combo("", &sceneSelectedMusicIndex, songs);
+        if (ImGui::Button("+##Add")) {
+            // Add music resource
+        }
+        if (ImGui::Button("-##Delete")) {
+            // Delete music resource
+        }
+        ImGui::EndChild();
 
         ImGui::BeginGroup();
         ImGui::Text("Font Resources");
@@ -89,45 +124,34 @@ private:
         namespace fs = boost::filesystem;
         fs::path path("./scenes");
         fs::directory_iterator end;
-        sceneFiles.clear();
+        sceneBoostFiles.clear();
 
         if (fs::exists(path) && fs::is_directory(path)) {
             for (fs::directory_iterator dir_itr(path); dir_itr != end; dir_itr++) {
                 if (fs::is_regular(dir_itr->status())) {
-                    sceneFiles.push_back(dir_itr->path());
+                    sceneBoostFiles.push_back(dir_itr->path());
+                    sceneFiles.push_back(dir_itr->path().c_str());
                 }
             }
         }
-
-        sceneFileString = "";
-        for (const auto &f : sceneFiles) {
-            sceneFileString += f.string().c_str();
-            sceneFileString += "\0";
-        }
-    }
-
-    std::string convertStringArray(std::vector<std::string> arr) {
-        std::string ret = "";
-        for (const auto &v : arr) {
-            ret += v.c_str();
-
-            ret += "\0";
-        }
-        return ret;
     }
 
     // SCENE WINDOW
     bool sceneWindow;
     std::unique_ptr<Scene> scene;
-    std::vector<boost::filesystem::path> sceneFiles;
-    std::string sceneFileString;
+    std::vector<boost::filesystem::path> sceneBoostFiles;
+    std::vector<std::string> sceneFiles;
     int sceneSelectedIndex;
     int sceneLoadedIndex;
     int sceneSelectedMusicIndex;
     int sceneLoadedMusicIndex;
-
+    std::vector<std::string> songs;
 
     // END SCENE WINDOW
+
+    float time;
+    int frames;
+    std::string fps;
 };
 
 #endif //INNER_DEBUG_H
