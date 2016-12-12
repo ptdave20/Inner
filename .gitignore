@@ -114,11 +114,3 @@ cmake_install.cmake
 install_manifest.txt
 CTestTestfile.cmake
 /cmake-build-debug/
-/libs/imguisfml/
-/libs/imgui/
-/libs/jsoncpp/
-/res/imgui.ini
-!/res/
-!/res/json/
-!/res/music/
-!/res/scenes/main.json
