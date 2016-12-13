@@ -54,9 +54,9 @@ public:
 					root["menus"].append(m);
 				}
 			}
-			root["resTextures"] = Json::Value;
-			root["resMusic"] = Json::Value;
-			root["resFont"] = Json::Value;
+            //root["resTextures"] = Json::Value;
+            //root["resMusic"] = Json::Value;
+            //root["resFont"] = Json::Value;
 
 			out << root << std::endl;
 
