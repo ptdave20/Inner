@@ -38,20 +38,27 @@ public:
 		std::ofstream out(file, std::ofstream::binary);
 
 		if (out.is_open()) {
-			Json::StreamWriter::Factory factory;
-			auto writer.newStreamWriter(out);
 			Json::Value root;
 
 			root["name"] = name;
 			root["type"] = type;
 			if (type == "menu") {
-				root["menus"] = Json::Value;
+				root["menus"].clear();
+				for (const auto &s : menuOptions) {
+					Json::Value m;
+					m["text"] = s.getText();
+					for (const auto &a : s.getOnSelect()) {
+						Json::Value o;
+					
+					}
+					root["menus"].append(m);
+				}
 			}
 			root["resTextures"] = Json::Value;
 			root["resMusic"] = Json::Value;
 			root["resFont"] = Json::Value;
 
-			writer << root;
+			out << root << std::endl;
 
 			out.close();
 		}
