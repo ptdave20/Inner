@@ -39,7 +39,7 @@ public:
 
 		if (out.is_open()) {
 			Json::Value root;
-
+			 
 			root["name"] = name;
 			root["type"] = type;
 			if (type == "menu") {
