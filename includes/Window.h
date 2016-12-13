@@ -75,6 +75,7 @@ public:
 
     void createWindow() {
         window.create(windowMode, title, style);
+		window.setFramerateLimit(60);
         if (debug) {
             ImGui::SFML::Init(window);
             window.resetGLStates();

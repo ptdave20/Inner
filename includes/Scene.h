@@ -34,6 +34,28 @@ public:
     Scene() {
     }
 
+	void save(const std::string &file) {
+		std::ofstream out(file, std::ofstream::binary);
+
+		if (out.is_open()) {
+			Json::StreamWriter::Factory factory;
+			auto writer.newStreamWriter(out);
+			Json::Value root;
+
+			root["name"] = name;
+			root["type"] = type;
+			if (type == "menu") {
+				root["menus"] = Json::Value;
+			}
+			root["resTextures"] = Json::Value;
+			root["resMusic"] = Json::Value;
+			root["resFont"] = Json::Value;
+
+			writer << root;
+
+			out.close();
+		}
+	}
 
     bool openFile(const std::string &file) {
         std::ifstream in(file, std::ifstream::binary);
@@ -133,31 +155,79 @@ public:
 
     // MUSIC CONTROLS
     void loadMusic(std::string file) {
-        music.openFromFile(file);
+		if (music) {
+			music->stop();
+			music->setPlayingOffset(sf::Time::Zero);
+		}
+
+		music = std::shared_ptr<sf::Music>(new sf::Music);
+        music->openFromFile(file);
     }
 
+	void loadMusicResource(std::string res) {
+		if (music) {
+			music->stop();
+			music->setPlayingOffset(sf::Time::Zero);
+		}
+
+		if (resMusic[res] != nullptr) {
+			music = resMusic[res];
+		}
+	}
+
+	const sf::Time getMusicPosition() {
+		if (music) {
+			return music->getPlayingOffset();
+		}
+
+		return sf::Time::Zero;
+	}
+
+	const sf::Time getMusicDuration() {
+		if (music) {
+			return music->getDuration();
+		}
+
+		return sf::Time::Zero;
+	}
+
+	bool isMusicPlaying() {
+		if (music) {
+			music->getStatus() == sf::Music::Playing;
+		}
+		return false;
+	}
+
     void startMusic() {
-        music.play();
+		if(music)
+			music->play();
     }
 
     void stopMusic() {
-        music.stop();
+		if(music)
+			music->stop();
     }
 
     void setMusicVolume(const float &n) {
-        music.setVolume(n);
+		if(music)
+			music->setVolume(n);
     }
 
     const float getMusicVolume() {
-        return music.getVolume();
+		if(music)
+			return music->getVolume();
+		return 0;
     }
 
     void setMusicLoop(bool value) {
-        music.setLoop(value);
+		if(music)
+			music->setLoop(value);
     }
 
     bool getMusicLoop() {
-        return music.getLoop();
+		if(music)
+			return music->getLoop();
+		return false;
     }
 
 
@@ -189,6 +259,12 @@ public:
         return true;
     }
 
+	void removeMusicResource(std::string name) {
+		if (resMusic[name]) {
+			resMusic.erase(name);
+		}
+	}
+
     bool loadFont(std::string name, std::string file) {
         std::shared_ptr<sf::Font> t(new sf::Font);
         if (!t->loadFromFile(file)) {
@@ -218,8 +294,10 @@ public:
     void update(const sf::Time &time) {
 
     }
+
+	
 private:
-    sf::Music music;
+    std::shared_ptr<sf::Music> music;
     std::string name, type;
     std::map<std::string, std::shared_ptr<sf::Texture>> resTextures;
     std::map<std::string, std::shared_ptr<Sprite>> resSprites;

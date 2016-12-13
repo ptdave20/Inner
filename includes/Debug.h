@@ -7,7 +7,8 @@
 
 
 #include "imgui/imgui.h"
-#include <iostream>
+#include <string>
+#include <vector>
 
 #include <boost/filesystem.hpp>
 #include "Scene.h"
@@ -58,6 +59,7 @@ public:
             sceneLoadedIndex = -1;
             sceneLoadedMusicIndex = -1;
         }
+
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
                     ImGui::GetIO().Framerate);
 
@@ -85,42 +87,84 @@ private:
             scene = std::unique_ptr<Scene>(new Scene());
             scene->openFile(sceneBoostFiles[sceneSelectedIndex].string());
             sceneLoadedIndex = sceneSelectedIndex;
-
+			sceneSelectedMusicIndex = 0;
             std::strcpy(sceneName, scene->getName().c_str());
-            auto &resMusic = scene->getResMusic();
-            songs.clear();
-            songs.push_back(std::string(" "));
-            for (const auto m : resMusic) {
-                songs.push_back(m.first);
-            }
+			updateSceneMusicResource();
         }
+		if (scene) {
+			ImGui::Separator();
+			// POP UPS
+			if (ImGui::BeginPopup("add_music")) {
+				ImGui::InputText("File Path", buffer, 256);
+				ImGui::InputText("Resource Name", buffer2, 256);
+				if (ImGui::Button("Add")) {
+					scene->loadMusic(buffer, buffer2);
+					ImGui::CloseCurrentPopup();
+					updateSceneMusicResource();
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel")) {
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
 
-        // Scene name
-        ImGui::InputText("Name", sceneName, 256);
 
-        ImGui::BeginGroup();
-        ImGui::Text("Texture Resources");
+			// Scene name
+			ImGui::InputText("Name", sceneName, 256);
 
-        ImGui::EndGroup();
+			ImGui::BeginGroup();
+			ImGui::Text("Texture Resources");
 
+			ImGui::EndGroup();
+			ImGui::Separator();
+			ImGui::Text("Music Resources");
+			ImGui::Combo("", &sceneSelectedMusicIndex, songs);
+			ImGui::SameLine();
+			if (ImGui::Button("+##Add")) {
+				// Add music resource
+				ImGui::OpenPopup("add_music");
+				buffer[0] = '\0';
+				buffer2[0] = '\0';
+			}
+			ImGui::SameLine();
+			if (songs.size() > 0 && ImGui::Button("-##Delete")) {
+				// Delete music resource
+				scene->removeMusicResource(songs[sceneSelectedMusicIndex]);
+				updateSceneMusicResource();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Play")) {
+				// Play the music resource
+				scene->loadMusicResource(songs[sceneSelectedMusicIndex]);
+				scene->startMusic();
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Stop")) {
+				// Stop the music resource
+				scene->stopMusic();
+			}
+			ImGui::Text("%.2f / %.2f", scene->getMusicPosition().asSeconds(), scene->getMusicDuration().asSeconds());
+			ImGui::Separator();
 
-        ImGui::BeginGroup();
-        ImGui::Text("Music Resources");
-        ImGui::Combo("", &sceneSelectedMusicIndex, songs);
-        if (ImGui::Button("+##Add")) {
-            // Add music resource
-        }
-        if (ImGui::Button("-##Delete")) {
-            // Delete music resource
-        }
-        ImGui::EndGroup();
-
-        ImGui::BeginGroup();
-        ImGui::Text("Font Resources");
-        ImGui::EndGroup();
-
+			ImGui::BeginGroup();
+			ImGui::Text("Font Resources");
+			ImGui::EndGroup();
+		}
         ImGui::End();
+	
     }
+
+	void updateSceneMusicResource() {
+		if (scene) {
+			auto &resMusic = scene->getResMusic();
+			songs.clear();
+			for (const auto m : resMusic) {
+				songs.push_back(m.first);
+			}
+		}
+	}
+
     void scanSceneFiles() {
         namespace fs = boost::filesystem;
         fs::path path("./scenes");
@@ -131,7 +175,7 @@ private:
             for (fs::directory_iterator dir_itr(path); dir_itr != end; dir_itr++) {
                 if (fs::is_regular(dir_itr->status())) {
                     sceneBoostFiles.push_back(dir_itr->path());
-                    sceneFiles.push_back(dir_itr->path().c_str());
+					sceneFiles.push_back(dir_itr->path().string());
                 }
             }
         }
@@ -147,6 +191,9 @@ private:
     int sceneSelectedMusicIndex;
     int sceneLoadedMusicIndex;
     std::vector<std::string> songs;
+	bool sceneShowAddMusic;
+
+	char buffer[256],buffer2[256];
 
     // END SCENE WINDOW
 
