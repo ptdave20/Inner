@@ -18,19 +18,7 @@ public:
         MenuOption::text = text;
     }
 
-	operator const Json::Value &() {
-		Json::Value ret;
-		ret["text"] = text;
-		ret["onSelect"] = onSelect;
-		ret["onMouseOver"] = onMouseOver;
-		ret["onMouseLeave"] = onMouseLeave;
-		ret["onMouseClick"] = onMouseClick;
-		ret["onMouseRelease"] = onMouseRelease;
-
-		return ret;
-	}
-
-	operator Json::Value &() {
+    operator Json::Value() {
 		Json::Value ret;
 		ret["text"] = text;
 		ret["onSelect"] = onSelect;

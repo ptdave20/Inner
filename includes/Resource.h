@@ -56,7 +56,7 @@ protected:
 
 class MusicResource : Resource<sf::Music> {
 public:
-	bool load() {
+    virtual bool load() {
 		if (value) {
 			unload();
 		}
@@ -64,34 +64,51 @@ public:
 		return value->openFromFile(path);
 	}
 
-	operator Json::Value&() {
+    operator Json::Value() {
 		Json::Value ret;
 		ret["type"] = "music";
 		ret["name"] = name;
 		ret["file"] = path;
-
 		return ret;
 	}
 };
 
 class TextureResource : Resource<sf::Texture> {
 public:
-	bool load() {
+    virtual bool load() {
 		if (value) {
 			unload();
 		}
-		value = std::shared_ptr<sf::Music>(new sf::Texture);
+        value = std::shared_ptr<sf::Texture>(new sf::Texture);
 		return value->loadFromFile(path);
 	}
 
-	operator Json::Value&() {
+    operator Json::Value() {
 		Json::Value ret;
 		ret["type"] = "texture";
 		ret["name"] = name;
 		ret["file"] = path;
-
 		return ret;
 	}
+};
+
+class FontResource : Resource<sf::Font> {
+public:
+    virtual bool load() {
+        if (value) {
+            unload();
+        }
+        value = std::shared_ptr<sf::Font>(new sf::Font);
+        return value->loadFromFile(path);
+    }
+
+    operator Json::Value() {
+        Json::Value ret;
+        ret["type"] = "font";
+        ret["name"] = name;
+        ret["file"] = path;
+        return ret;
+    }
 };
 
 #endif //INNER_RESOURCE_H

@@ -26,7 +26,7 @@ public:
         OnAction::actions = actions;
     }
 
-	operator Json::Value&() {
+    operator Json::Value() {
 		Json::Value ret;
 		for (const auto &action : actions) {
 			Json::Value act;

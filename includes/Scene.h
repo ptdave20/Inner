@@ -58,7 +58,7 @@ public:
 		}
 	}
 
-	operator Json::Value &() {
+    operator Json::Value() {
 		Json::Value ret;
 
 		ret["name"] = name;
