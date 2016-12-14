@@ -6,8 +6,8 @@
 #define INNER_RESOURCE_H
 
 #include <string>
-
-template<class T>
+#include <memory>
+template<typename T>
 class Resource {
 public:
     const std::string &getName() const {
@@ -36,8 +36,9 @@ public:
 
 	virtual bool load() = 0;
 	virtual void unload() {
-		if (value)
-			delete value;
+		if (value) {
+			value.reset();
+		}
 	}
 
 	std::shared_ptr<T> getValue() {
