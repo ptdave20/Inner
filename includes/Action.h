@@ -8,36 +8,53 @@
 #include <string>
 #include <map>
 
-class OnAction {
+enum ACTIONS {
+    MUSIC_START,
+    MUSIC_STOP,
+    MUSIC_LOOP,
+    MUSIC_LOAD,
+    MUSIC_UNLOAD,
+
+    TEXTURE_LOAD,
+    TEXTURE_UNLOAD,
+
+    FONT_LOAD,
+    FONT_UNLOAD,
+
+    SPRITE_LOAD,
+    SPRITE_UNLOAD
+};
+
+const std::string ACTIONS_TEXT[] = {
+        "music_start",
+        "music_stop",
+        "music_loop",
+        "music_load",
+        "music_unload",
+
+        "texture_load",
+        "texture_unload",
+
+        "font_load",
+        "font_unload",
+
+        "sprite_load",
+        "sprite_unload"
+};
+
+typedef std::pair<int, std::string> ACTION;
+
+class OnAction : public std::vector<ACTION> {
 public:
-    bool isDone() const {
-        return done;
-    }
-
-    void setDone(bool done) {
-        OnAction::done = done;
-    }
-
-    const std::map<std::string, std::string> &getActions() const {
-        return actions;
-    }
-
-    void setActions(const std::map<std::string, std::string> &actions) {
-        OnAction::actions = actions;
-    }
-
     operator Json::Value() {
 		Json::Value ret;
-		for (const auto &action : actions) {
+        for (const auto &action : *this) {
 			Json::Value act;
-			act[action.first] = action.second;
+            act[ACTIONS_TEXT[action.first]] = action.second;
 			ret.append(ret);
 		}
 		return ret;
 	}
-private:
-    std::map<std::string, std::string> actions;
-	bool done;
 };
 
 
