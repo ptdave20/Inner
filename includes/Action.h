@@ -9,8 +9,6 @@
 #include <map>
 
 class OnAction {
-private:
-    bool done;
 public:
     bool isDone() const {
         return done;
@@ -18,14 +16,6 @@ public:
 
     void setDone(bool done) {
         OnAction::done = done;
-    }
-
-    const std::string &getDo_what() const {
-        return do_what;
-    }
-
-    void setDo_what(const std::string &do_what) {
-        OnAction::do_what = do_what;
     }
 
     const std::map<std::string, std::string> &getActions() const {
@@ -36,9 +26,18 @@ public:
         OnAction::actions = actions;
     }
 
+	operator Json::Value&() {
+		Json::Value ret;
+		for (const auto &action : actions) {
+			Json::Value act;
+			act[action.first] = action.second;
+			ret.append(ret);
+		}
+		return ret;
+	}
 private:
-    std::string do_what;
     std::map<std::string, std::string> actions;
+	bool done;
 };
 
 

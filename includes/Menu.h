@@ -18,53 +18,37 @@ public:
         MenuOption::text = text;
     }
 
-    const std::vector<OnAction> &getOnSelect() const {
-        return onSelect;
-    }
+	operator const Json::Value &() {
+		Json::Value ret;
+		ret["text"] = text;
+		ret["onSelect"] = onSelect;
+		ret["onMouseOver"] = onMouseOver;
+		ret["onMouseLeave"] = onMouseLeave;
+		ret["onMouseClick"] = onMouseClick;
+		ret["onMouseRelease"] = onMouseRelease;
 
-    void setOnSelect(const std::vector<OnAction> &onSelect) {
-        MenuOption::onSelect = onSelect;
-    }
+		return ret;
+	}
 
-    const std::vector<OnAction> &getOnMouseOver() const {
-        return onMouseOver;
-    }
+	operator Json::Value &() {
+		Json::Value ret;
+		ret["text"] = text;
+		ret["onSelect"] = onSelect;
+		ret["onMouseOver"] = onMouseOver;
+		ret["onMouseLeave"] = onMouseLeave;
+		ret["onMouseClick"] = onMouseClick;
+		ret["onMouseRelease"] = onMouseRelease;
 
-    void setOnMouseOver(const std::vector<OnAction> &onMouseOver) {
-        MenuOption::onMouseOver = onMouseOver;
-    }
-
-    const std::vector<OnAction> &getOnMouseLeave() const {
-        return onMouseLeave;
-    }
-
-    void setOnMouseLeave(const std::vector<OnAction> &onMouseLeave) {
-        MenuOption::onMouseLeave = onMouseLeave;
-    }
-
-    const std::vector<OnAction> &getOnMouseClick() const {
-        return onMouseClick;
-    }
-
-    void setOnMouseClick(const std::vector<OnAction> &onMouseClick) {
-        MenuOption::onMouseClick = onMouseClick;
-    }
-
-    const std::vector<OnAction> &getOnMouseRelease() const {
-        return onMouseRelease;
-    }
-
-    void setOnMouseRelease(const std::vector<OnAction> &onMouseRelease) {
-        MenuOption::onMouseRelease = onMouseRelease;
-    }
+		return ret;
+	}
 
 private:
     std::string text;
-    std::vector<OnAction> onSelect;
-    std::vector<OnAction> onMouseOver;
-    std::vector<OnAction> onMouseLeave;
-    std::vector<OnAction> onMouseClick;
-    std::vector<OnAction> onMouseRelease;
+    OnAction onSelect;
+    OnAction onMouseOver;
+    OnAction onMouseLeave;
+    OnAction onMouseClick;
+    OnAction onMouseRelease;
 };
 
 

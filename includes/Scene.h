@@ -44,14 +44,8 @@ public:
 			root["type"] = type;
 			if (type == "menu") {
 				root["menus"].clear();
-				for (const auto &s : menuOptions) {
-					Json::Value m;
-					m["text"] = s.getText();
-					for (const auto &a : s.getOnSelect()) {
-						Json::Value o;
-					
-					}
-					root["menus"].append(m);
+				for (auto &s : menuOptions) {
+					root["menus"].append(s);
 				}
 			}
             //root["resTextures"] = Json::Value;
@@ -62,6 +56,23 @@ public:
 
 			out.close();
 		}
+	}
+
+	operator Json::Value &() {
+		Json::Value ret;
+
+		ret["name"] = name;
+		ret["type"] = type;
+		if (type == "menu") {
+			ret["menus"].clear();
+			for (auto &s : menuOptions) {
+				ret["menus"].append(s);
+			}
+		}
+
+
+
+		return ret;
 	}
 
     bool openFile(const std::string &file) {
