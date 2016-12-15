@@ -22,8 +22,33 @@ if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIR})
 endif ()
 
-set(SOURCE_FILES main.cpp includes/Entity.h includes/Tile.h includes/Map.h includes/Scene.h includes/Window.h includes/imgui/imgui.cpp includes/imgui/imgui-SFML.cpp includes/imgui/imgui_draw.cpp includes/Debug.h includes/Sprite.h includes/jsoncpp.cpp includes/Resource.h includes/Action.h includes/Menu.h)
+find_package(Lua REQUIRED)
+if (Lua_FOUND)
+    include_directories(${Lua_INCLUDE_DIR})
+endif ()
+
+
+set(HEADER_FILES
+        includes/Entity.h
+        includes/Tile.h
+        includes/Map.h
+        includes/Scene.h
+        includes/Window.h
+        includes/Debug.h
+        includes/Sprite.h
+        includes/jsoncpp.cpp
+        includes/Resource.h
+        includes/Action.h
+        includes/Menu.h)
+
+
+set(IMGUI_FILES
+        includes/imgui/imgui.cpp
+        includes/imgui/imgui-SFML.cpp
+        includes/imgui/imgui_draw.cpp)
+
+set(SOURCE_FILES main.cpp ${HEADER_FILES} ${IMGUI_FILES} includes/Inner.h)
 
 add_executable(Inner ${SOURCE_FILES})
 
-target_link_libraries(Inner ${SFML_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(Inner ${SFML_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} ${Lua_LIBRARIES})

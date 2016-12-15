@@ -22,10 +22,18 @@ enum ACTIONS {
     FONT_UNLOAD,
 
     SPRITE_LOAD,
-    SPRITE_UNLOAD
+    SPRITE_UNLOAD,
+
+    SCENE_LOAD,
+    SCENE_UNLOAD,
+    SCENE_BEGIN,
+    SCENE_END,
+
+    VARIABLE_SET,
+    VARIABLE_MOD
 };
 
-const std::string ACTIONS_TEXT[] = {
+const std::vector<std::string> ACTIONS_TEXT = {
         "music_start",
         "music_stop",
         "music_loop",
@@ -39,7 +47,15 @@ const std::string ACTIONS_TEXT[] = {
         "font_unload",
 
         "sprite_load",
-        "sprite_unload"
+        "sprite_unload",
+
+        "scene_load",
+        "scene_unload",
+        "scene_begin",
+        "scene_end",
+
+        "variable_set",
+        "variable_mod"
 };
 
 typedef std::pair<int, std::string> ACTION;
@@ -55,6 +71,26 @@ public:
 		}
 		return ret;
 	}
+
+    void Parse(Json::Value &value) {
+        const auto members = value.getMemberNames();
+
+        for (const auto &member : members) {
+            auto v = value[member];
+            ACTION action;
+            for (int i = 0; i < ACTIONS_TEXT.size(); i++) {
+                if (member == ACTIONS_TEXT[i]) {
+                    action.first = i;
+                    action.second = v.asString();
+
+                    push_back(action);
+                    break;
+                }
+            }
+
+            // If we reach this point, then we don't know what it is or we have added it already
+        }
+    }
 };
 
 
