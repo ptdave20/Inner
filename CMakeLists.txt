@@ -23,8 +23,8 @@ if (Boost_FOUND)
 endif ()
 
 find_package(Lua REQUIRED)
-if (Lua_FOUND)
-    include_directories(${Lua_INCLUDE_DIR})
+if (LUA_FOUND)
+    include_directories(${LUA_INCLUDE_DIR})
 endif ()
 
 
@@ -51,4 +51,4 @@ set(SOURCE_FILES main.cpp ${HEADER_FILES} ${IMGUI_FILES} includes/Inner.h)
 
 add_executable(Inner ${SOURCE_FILES})
 
-target_link_libraries(Inner ${SFML_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} ${Lua_LIBRARIES})
+target_link_libraries(Inner ${SFML_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} ${LUA_LIBRARIES})

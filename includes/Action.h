@@ -2,11 +2,11 @@
 // Created by ptdave on 12/8/16.
 //
 
+#include "Inner.h"
+
 #ifndef INNER_ACTION_H
 #define INNER_ACTION_H
 
-#include <string>
-#include <map>
 
 enum ACTIONS {
     MUSIC_START,

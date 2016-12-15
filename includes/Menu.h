@@ -2,11 +2,11 @@
 // Created by ptdave on 12/8/16.
 //
 
+#include "Inner.h"
+
 #ifndef INNER_MENU_H
 #define INNER_MENU_H
 
-#include "Action.h"
-#include <vector>
 
 class MenuOption {
 public:

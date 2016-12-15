@@ -2,12 +2,10 @@
 // Created by ptdave on 12/6/16.
 //
 
+#include "Inner.h"
+
 #ifndef INNER_SPRITE_H
 #define INNER_SPRITE_H
-
-#include <SFML/Graphics.hpp>
-#include "json/json.h"
-#include "Scene.h"
 
 struct SpriteAnimation {
     std::string name;

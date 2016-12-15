@@ -2,16 +2,10 @@
 // Created by ptdave on 12/5/16.
 //
 
+#include "Inner.h"
+
 #ifndef INNER_DEBUG_H
 #define INNER_DEBUG_H
-
-
-#include "imgui/imgui.h"
-#include <string>
-#include <vector>
-
-#include <boost/filesystem.hpp>
-#include "Scene.h"
 
 
 namespace ImGui {

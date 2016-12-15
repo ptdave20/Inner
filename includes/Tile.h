@@ -2,12 +2,10 @@
 // Created by ptdave on 11/27/16.
 //
 
+#include "Inner.h"
+
 #ifndef INNER_TILE_H
 #define INNER_TILE_H
-
-
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/System/Time.hpp>
 
 enum TileType {
     Solid = 0,

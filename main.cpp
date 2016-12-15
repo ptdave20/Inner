@@ -1,5 +1,4 @@
-#include <iostream>
-#include "includes/Window.h"
+#include "includes/Inner.h"
 
 int main() {
     Window window;

@@ -2,10 +2,11 @@
 // Created by ptdave on 11/27/16.
 //
 
+#include "Inner.h"
+
 #ifndef INNER_ENTITY_H
 #define INNER_ENTITY_H
 
-#include <SFML/Graphics.hpp>
 
 class Entity : public sf::Sprite {
 private:

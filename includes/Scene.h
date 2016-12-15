@@ -2,31 +2,10 @@
 // Created by ptdave on 11/27/16.
 //
 
+#include "Inner.h"
+
 #ifndef INNER_SCENE_H
 #define INNER_SCENE_H
-
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
-
-#include "Map.h"
-#include "Entity.h"
-#include "Tile.h"
-#include "Sprite.h"
-#include "Resource.h"
-#include "Action.h"
-#include "Menu.h"
-
-#include <string>
-
-#include <map>
-#include <memory>
-#include "json/json.h"
-#include <fstream>
-#include <ios>
-#include <locale>
-
-
-
 
 class Scene {
 public:

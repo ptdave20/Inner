@@ -2,18 +2,10 @@
 // Created by ptdave on 12/5/16.
 //
 
+#include "Inner.h"
+
 #ifndef INNER_WINDOW_H
 #define INNER_WINDOW_H
-
-#include <SFML/Window.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
-#include "imgui/imgui.h"
-#include "imgui/imgui-SFML.h"
-#include "json/json.h"
-#include "Debug.h"
-#include <fstream>
-#include "Scene.h"
 
 class Window {
 public:

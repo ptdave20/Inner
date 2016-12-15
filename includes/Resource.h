@@ -2,11 +2,12 @@
 // Created by ptdave on 12/7/16.
 //
 
+#include "Inner.h"
+
 #ifndef INNER_RESOURCE_H
 #define INNER_RESOURCE_H
 
-#include <string>
-#include <memory>
+
 template<typename T>
 class Resource {
 public:
