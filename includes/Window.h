@@ -9,7 +9,7 @@
 
 class Window {
 public:
-    Window() : state{true} {
+    Window() {
         windowMode.width = 640;
         windowMode.height = 480;
         windowMode.bitsPerPixel = 32;;
@@ -18,13 +18,25 @@ public:
         debug = false;
 
 
-        state["window"].SetObj(*this);
     }
 
-    void openConfig(const std::string &file) {
+    static void Register(sel::State &state) {
+        state["Window"].SetClass<Window>("openConfig", &Window::openConfig,
+                                         "createWindow", &Window::createWindow,
+                                         "run", &Window::run,
+                                         "stop", &Window::stop);
+
+        // Register our objects
+        Scene::Register(state);
+        MusicResource::Register(state);
+        TextureResource::Register(state);
+    }
+
+    bool openConfig(std::string file) {
+        std::cout << file << std::endl;
         std::ifstream in(file, std::ifstream::binary);
         if (!in.is_open()) {
-            return;
+            return false;
         }
 
         Json::Reader reader;
@@ -32,7 +44,7 @@ public:
 
         if (!reader.parse(in, root)) {
             in.close();
-            return;
+            return false;
         }
 
         if (!root["window"].empty() && root["window"].isObject()) {
@@ -65,7 +77,7 @@ public:
         }
 
         in.close();
-
+        return true;
     }
 
     void createWindow() {
@@ -77,22 +89,25 @@ public:
         }
     }
 
+    void stop() {
+        running = false;
+    }
 
     void run() {
         sf::Event event;
         sf::Clock clock;
         sf::Time time;
         Debug _debug;
-        bool run = true;
+        running = true;
 
-        while (run) {
+        while (running) {
             //
             while (window.pollEvent(event)) {
                 if (debug)
                     ImGui::SFML::ProcessEvent(event);
                 switch (event.type) {
                     case sf::Event::Closed:
-                        run = false;
+                        running = false;
                         break;
                     case sf::Event::Resized:
                         windowMode.width = event.size.width;
@@ -136,9 +151,9 @@ private:
     bool debug;
     unsigned int style;
     std::vector<std::shared_ptr<Scene>> sceneStack;
+    bool running;
 
 
-    sel::State state;
 };
 
 

@@ -57,8 +57,15 @@ protected:
 
 class MusicResource : Resource<sf::Music> {
 public:
-    MusicResource() {
+    MusicResource(std::string file) {
+        path = file;
+        load();
+    }
 
+    ~MusicResource() {
+        if (value) {
+            unload();
+        }
     }
     virtual bool load() {
 		if (value) {
@@ -107,13 +114,41 @@ public:
         }
     }
 
+    void setVolume(const float &v) {
+        if (value) {
+            value->setVolume(v);
+        }
+    }
+
+    const float getVolume(const float &v) {
+        return value->getVolume();
+    }
+
+    void setLoop(const bool &v) {
+        if (value) {
+            value->setLoop(v);
+        }
+    }
+
+    bool getLoop() {
+        if (value) {
+            return value->getLoop();
+        }
+
+        return false;
+    }
+
     static void Register(sel::State &state) {
-        state["Music"].SetClass<MusicResource>(
+        state["MusicResource"].SetClass<MusicResource, std::string>(
                 "play", &MusicResource::play,
                 "stop", &MusicResource::stop,
                 "getDuration", &MusicResource::getDuration,
                 "getCurrentTime", &MusicResource::getCurrentTime,
-                "setCurrentTime", &MusicResource::setCurrentTime
+                "setCurrentTime", &MusicResource::setCurrentTime,
+                "getVolume", &MusicResource::getVolume,
+                "setVolume", &MusicResource::setVolume,
+                "getLoop", &MusicResource::getLoop,
+                "setLoop", &MusicResource::setLoop
         );
     }
 };
@@ -135,6 +170,10 @@ public:
 		ret["file"] = path;
 		return ret;
 	}
+
+    static void Register(sel::State &state) {
+        state["TextureResource"].SetClass<TextureResource>();
+    }
 };
 
 class FontResource : Resource<sf::Font> {
