@@ -9,13 +9,16 @@
 
 class Window {
 public:
-    Window() {
+    Window() : state{true} {
         windowMode.width = 640;
         windowMode.height = 480;
         windowMode.bitsPerPixel = 32;;
         title = "Inner";
         style = sf::Style::Default;
         debug = false;
+
+
+        state["window"].SetObj(*this);
     }
 
     void openConfig(const std::string &file) {
@@ -73,6 +76,7 @@ public:
             window.resetGLStates();
         }
     }
+
 
     void run() {
         sf::Event event;
@@ -132,6 +136,9 @@ private:
     bool debug;
     unsigned int style;
     std::vector<std::shared_ptr<Scene>> sceneStack;
+
+
+    sel::State state;
 };
 
 

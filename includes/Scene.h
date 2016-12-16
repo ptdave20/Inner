@@ -13,6 +13,13 @@ public:
     Scene() {
     }
 
+    static void Register(sel::State &state) {
+        state["Scene"].SetClass<Scene>(
+                "setName", &Scene::setName,
+                "getName", &Scene::getName
+        );
+    }
+
 	void save(const std::string &file) {
 		std::ofstream out(file, std::ofstream::binary);
 

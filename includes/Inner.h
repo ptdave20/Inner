@@ -46,5 +46,4 @@
 #include "Debug.h"
 #include "Window.h"
 
-
 #endif //INNER_INNER_H

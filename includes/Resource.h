@@ -57,6 +57,9 @@ protected:
 
 class MusicResource : Resource<sf::Music> {
 public:
+    MusicResource() {
+
+    }
     virtual bool load() {
 		if (value) {
 			unload();
@@ -72,6 +75,47 @@ public:
 		ret["file"] = path;
 		return ret;
 	}
+
+    void play() {
+        if (value) {
+            value->play();
+        }
+    }
+
+    void stop() {
+        if (value) {
+            value->stop();
+        }
+    }
+
+    float getDuration() {
+        if (value) {
+            value->getDuration();
+        }
+    }
+
+    float getCurrentTime() {
+        if (value) {
+            value->getPlayingOffset().asSeconds();
+        }
+    }
+
+    void setCurrentTime(const float &v) {
+        if (value) {
+            sf::Time t;
+            value->setPlayingOffset(sf::seconds(v));
+        }
+    }
+
+    static void Register(sel::State &state) {
+        state["Music"].SetClass<MusicResource>(
+                "play", &MusicResource::play,
+                "stop", &MusicResource::stop,
+                "getDuration", &MusicResource::getDuration,
+                "getCurrentTime", &MusicResource::getCurrentTime,
+                "setCurrentTime", &MusicResource::setCurrentTime
+        );
+    }
 };
 
 class TextureResource : Resource<sf::Texture> {
