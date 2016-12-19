@@ -12,6 +12,7 @@
 #include <SFML/Network.hpp>
 #include <SFML/System.hpp>
 #include <SFML/OpenGL.hpp>
+#include <SFML/Graphics/Rect.hpp>
 
 
 // BOOST INCLUDES

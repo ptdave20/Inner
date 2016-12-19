@@ -7,6 +7,8 @@
 #ifndef INNER_SCENE_H
 #define INNER_SCENE_H
 
+typedef sel::function<int(float)> LuaRendererFunc;
+
 class Scene {
 public:
     //CONSTRUCTOR
@@ -31,13 +33,8 @@ public:
     void render(const sf::Time &delta) {
         // Do all the backend work, then call our luaFunc for other work
     }
-
-    void setLuaRender(sel::function<int(float)> luaFunc) {
-        this->luaFunc = luaFunc;
-    }
 private:
     std::string name;
-    sel::function<int(float)> luaFunc;
 };
 
 #endif //INNER_SCENE_H

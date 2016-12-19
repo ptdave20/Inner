@@ -71,7 +71,7 @@ public:
 
         if (root["initScene"].isString()) {
             std::shared_ptr<Scene> initScene(new Scene());
-            initScene->openFile(root["initScene"].asString());
+            //initScene->openFile(root["initScene"].asString());
             std::cout << initScene->getName() << " loaded" << std::endl;
             sceneStack.push_back(initScene);
         }
