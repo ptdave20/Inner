@@ -86,6 +86,26 @@ public:
         animations[name] = anim;
     }
 
+    bool loadFromFile(const std::string file) {
+        std::ifstream f;
+        f.open(file, std::ios::binary);
+        if (!f.is_open() && !f.good()) {
+            return false;
+        }
+
+        Json::Reader reader;
+        Json::Value root;
+        if (!reader.parse(f, root)) {
+            return false;
+        }
+
+        if (root["animations"].isArray()) {
+
+        }
+
+        return true;
+    }
+
 private:
     std::string name;
     sf::Sprite sprite;
