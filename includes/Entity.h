@@ -8,50 +8,24 @@
 #define INNER_ENTITY_H
 
 
-class Entity : public sf::Sprite {
+class Entity {
 private:
     std::string name;
-    sf::FloatRect spriteBounds;
-    bool useBounds;
-    sf::Vector2f vector;
+    Sprite *sprite;
 public:
-    Entity(const std::string &name = "Unnamed Entity") : name(name) {
-        useBounds = false;
+    static void Register(sel::State &state) {
+        state["Entity"].SetClass<Entity, std::string>(
+                "setSprite", &Entity::setSprite
+        );
     }
 
-    const std::string &getName() const {
-        return name;
+    Entity(std::string name) {
+        this->name = name;
     }
 
-    void setName(const std::string &name) {
-        Entity::name = name;
+    void setSprite(Sprite *sprite) {
+        this->sprite = sprite;
     }
-
-    const sf::FloatRect &getSpriteBounds() const {
-        return spriteBounds;
-    }
-
-    void setSpriteBounds(const sf::FloatRect &spriteBounds) {
-        Entity::spriteBounds = spriteBounds;
-    }
-
-    bool isUseBounds() const {
-        return useBounds;
-    }
-
-    void setUseBounds(bool useBounds) {
-        Entity::useBounds = useBounds;
-    }
-
-    const sf::Vector2f &getVector() const {
-        return vector;
-    }
-
-    void setVector(const sf::Vector2f &vector) {
-        Entity::vector = vector;
-    }
-
-    virtual void update(const sf::Time &time) = 0;
 };
 
 

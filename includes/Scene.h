@@ -18,7 +18,8 @@ public:
     static void Register(sel::State &state) {
         state["Scene"].SetClass<Scene>(
                 "setName", &Scene::setName,
-                "getName", &Scene::getName
+                "getName", &Scene::getName,
+                "registerSprite", &Scene::registerSprite
         );
     }
 
@@ -30,11 +31,18 @@ public:
         return name;
     }
 
+    void registerSprite(Sprite *sprite) {
+        sprites.push_back(sprite);
+    }
+
+
+
     void render(const sf::Time &delta) {
         // Do all the backend work, then call our luaFunc for other work
     }
 private:
     std::string name;
+    std::vector<Sprite *> sprites;
 };
 
 #endif //INNER_SCENE_H
