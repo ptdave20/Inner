@@ -21,10 +21,19 @@ public:
     }
 
     static void Register(sel::State &state) {
-        state["Window"].SetClass<Window>("openConfig", &Window::openConfig,
-                                         "createWindow", &Window::createWindow,
-                                         "run", &Window::run,
-                                         "stop", &Window::stop);
+        state["Window"].SetClass<Window>(
+			"openConfig", &Window::openConfig,
+            "createWindow", &Window::createWindow,
+            "run", &Window::run,
+            "stop", &Window::stop);
+
+		// Register IntRect
+		state["IntRect"].SetClass<sf::IntRect>(
+				"left",&sf::IntRect::left,
+				"top",&sf::IntRect::top,
+				"width",&sf::IntRect::width,
+				"height",&sf::IntRect::height
+			);
 
         // Register our objects
         Scene::Register(state);

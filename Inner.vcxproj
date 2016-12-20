@@ -122,6 +122,30 @@
     <ClInclude Include="includes\Menu.h" />
     <ClInclude Include="includes\Resource.h" />
     <ClInclude Include="includes\Scene.h" />
+    <ClInclude Include="includes\selene.h" />
+    <ClInclude Include="includes\selene\BaseFun.h" />
+    <ClInclude Include="includes\selene\Class.h" />
+    <ClInclude Include="includes\selene\ClassFun.h" />
+    <ClInclude Include="includes\selene\Ctor.h" />
+    <ClInclude Include="includes\selene\Dtor.h" />
+    <ClInclude Include="includes\selene\ExceptionHandler.h" />
+    <ClInclude Include="includes\selene\ExceptionTypes.h" />
+    <ClInclude Include="includes\selene\Fun.h" />
+    <ClInclude Include="includes\selene\function.h" />
+    <ClInclude Include="includes\selene\LuaName.h" />
+    <ClInclude Include="includes\selene\LuaRef.h" />
+    <ClInclude Include="includes\selene\MetatableRegistry.h" />
+    <ClInclude Include="includes\selene\Obj.h" />
+    <ClInclude Include="includes\selene\ObjFun.h" />
+    <ClInclude Include="includes\selene\primitives.h" />
+    <ClInclude Include="includes\selene\references.h" />
+    <ClInclude Include="includes\selene\Registry.h" />
+    <ClInclude Include="includes\selene\ResourceHandler.h" />
+    <ClInclude Include="includes\selene\Selector.h" />
+    <ClInclude Include="includes\selene\State.h" />
+    <ClInclude Include="includes\selene\traits.h" />
+    <ClInclude Include="includes\selene\Tuple.h" />
+    <ClInclude Include="includes\selene\util.h" />
     <ClInclude Include="includes\Sprite.h" />
     <ClInclude Include="includes\Tile.h" />
     <ClInclude Include="includes\Window.h" />
@@ -146,6 +170,8 @@
     <Import Project="packages\freeglut.2.8.1.15\build\native\freeglut.targets" Condition="Exists('packages\freeglut.2.8.1.15\build\native\freeglut.targets')" />
     <Import Project="packages\glew.redist.1.9.0.1\build\native\glew.redist.targets" Condition="Exists('packages\glew.redist.1.9.0.1\build\native\glew.redist.targets')" />
     <Import Project="packages\glew.1.9.0.1\build\native\glew.targets" Condition="Exists('packages\glew.1.9.0.1\build\native\glew.targets')" />
+    <Import Project="packages\lua.redist.5.3.3\build\native\lua.redist.targets" Condition="Exists('packages\lua.redist.5.3.3\build\native\lua.redist.targets')" />
+    <Import Project="packages\lua.5.3.3\build\native\lua.targets" Condition="Exists('packages\lua.5.3.3\build\native\lua.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -166,5 +192,7 @@
     <Error Condition="!Exists('packages\freeglut.2.8.1.15\build\native\freeglut.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\freeglut.2.8.1.15\build\native\freeglut.targets'))" />
     <Error Condition="!Exists('packages\glew.redist.1.9.0.1\build\native\glew.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\glew.redist.1.9.0.1\build\native\glew.redist.targets'))" />
     <Error Condition="!Exists('packages\glew.1.9.0.1\build\native\glew.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\glew.1.9.0.1\build\native\glew.targets'))" />
+    <Error Condition="!Exists('packages\lua.redist.5.3.3\build\native\lua.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\lua.redist.5.3.3\build\native\lua.redist.targets'))" />
+    <Error Condition="!Exists('packages\lua.5.3.3\build\native\lua.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\lua.5.3.3\build\native\lua.targets'))" />
   </Target>
 </Project>
