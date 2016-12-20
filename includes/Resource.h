@@ -126,7 +126,7 @@ public:
         return value->getVolume();
     }
 
-    void setLoop(const bool &v) {
+    void setLoop(const bool v) {
         if (value) {
             value->setLoop(v);
         }

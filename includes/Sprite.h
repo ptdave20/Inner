@@ -20,7 +20,6 @@ public:
 
     SpriteAnimation() {
         time = 0;
-        current = 0;
         loop = false;
     }
 
@@ -46,7 +45,7 @@ public:
 
 private:
     bool loop;
-    float time, current;
+    float time;
     std::vector<sf::IntRect> rect;
 };
 

@@ -8,9 +8,9 @@
 window = Window.new()
 bgMusic = MusicResource.new("music/Giant Wyrm.ogg")
 bgMusic:play()
+bgMusic:setLoop(true)
 if window:openConfig("json/main.json") then
     window:createWindow()
-
 
 
     window:run()
