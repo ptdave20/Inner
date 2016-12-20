@@ -70,11 +70,12 @@ public:
         state["Sprite"].SetClass<Sprite, std::string>(
                 "addAnimation", &Sprite::addAnimation,
                 "getName", &Sprite::getName,
-                "setName", &Sprite::setName
+                "setName", &Sprite::setName,
+                "loadFromFile", &Sprite::loadFromFile
         );
     }
 
-    void setName(std::string _name) {
+    void setName(const std::string _name) {
         name = _name;
     }
 
@@ -100,7 +101,15 @@ public:
         }
 
         if (root["animations"].isArray()) {
-
+            for (const auto &anim : root["animations"]) {
+                SpriteAnimation a;
+                std::string name = anim["name"].asString();
+                for (const auto &r : anim["rect"]) {
+                    a.add(r[0].asInt(), r[1].asInt(), r[2].asInt(), r[3].asInt());
+                }
+                a.setLoop(anim["loop"].asBool());
+                addAnimation(name, a);
+            }
         }
 
         return true;
