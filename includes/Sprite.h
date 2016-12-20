@@ -44,15 +44,6 @@ public:
         return loop;
     }
 
-    const sf::IntRect &update(const float &v) {
-        current += v;
-        while (current >= time) {
-            current -= time;
-        }
-
-        return rect[static_cast<int>(current / time)];
-    }
-
 private:
     bool loop;
     float time, current;
