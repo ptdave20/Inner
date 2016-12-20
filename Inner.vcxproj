@@ -146,6 +146,8 @@
     <Import Project="packages\freeglut.2.8.1.15\build\native\freeglut.targets" Condition="Exists('packages\freeglut.2.8.1.15\build\native\freeglut.targets')" />
     <Import Project="packages\glew.redist.1.9.0.1\build\native\glew.redist.targets" Condition="Exists('packages\glew.redist.1.9.0.1\build\native\glew.redist.targets')" />
     <Import Project="packages\glew.1.9.0.1\build\native\glew.targets" Condition="Exists('packages\glew.1.9.0.1\build\native\glew.targets')" />
+    <Import Project="packages\lua.redist.5.3.3\build\native\lua.redist.targets" Condition="Exists('packages\lua.redist.5.3.3\build\native\lua.redist.targets')" />
+    <Import Project="packages\lua.5.3.3\build\native\lua.targets" Condition="Exists('packages\lua.5.3.3\build\native\lua.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -166,5 +168,7 @@
     <Error Condition="!Exists('packages\freeglut.2.8.1.15\build\native\freeglut.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\freeglut.2.8.1.15\build\native\freeglut.targets'))" />
     <Error Condition="!Exists('packages\glew.redist.1.9.0.1\build\native\glew.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\glew.redist.1.9.0.1\build\native\glew.redist.targets'))" />
     <Error Condition="!Exists('packages\glew.1.9.0.1\build\native\glew.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\glew.1.9.0.1\build\native\glew.targets'))" />
+    <Error Condition="!Exists('packages\lua.redist.5.3.3\build\native\lua.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\lua.redist.5.3.3\build\native\lua.redist.targets'))" />
+    <Error Condition="!Exists('packages\lua.5.3.3\build\native\lua.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\lua.5.3.3\build\native\lua.targets'))" />
   </Target>
 </Project>

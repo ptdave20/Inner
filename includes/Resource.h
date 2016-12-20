@@ -99,12 +99,14 @@ public:
         if (value) {
             value->getDuration();
         }
+		return 0;
     }
 
     float getCurrentTime() {
         if (value) {
             value->getPlayingOffset().asSeconds();
         }
+		return 0;
     }
 
     void setCurrentTime(const float &v) {
