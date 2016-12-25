@@ -42,6 +42,18 @@ public:
 		}
 	}
 
+    Resource<T> &operator=(const Resource<T> &v) {
+        this->value = v.value;
+        this->name = v.name;
+        this->type = v.type;
+        this->path = v.path;
+        return *this;
+    }
+
+    operator std::shared_ptr<T>() {
+        return value;
+    }
+
 	std::shared_ptr<T> getValue() {
 		if (value) {
 			return value;
@@ -176,6 +188,8 @@ public:
     static void Register(sel::State &state) {
         state["TextureResource"].SetClass<TextureResource>();
     }
+
+    friend class SpriteResource;
 };
 
 class FontResource : Resource<sf::Font> {
@@ -195,6 +209,133 @@ public:
         ret["file"] = path;
         return ret;
     }
+};
+
+class SpriteAnimation {
+public:
+    static void Register(sel::State &state) {
+        state["SpriteAnimation"].SetClass<SpriteAnimation>(
+                "add", &SpriteAnimation::add,
+                "size", &SpriteAnimation::size,
+                "setLoop", &SpriteAnimation::setLoop,
+                "getLoop", &SpriteAnimation::getLoop
+        );
+    }
+
+    SpriteAnimation() {
+        time = 0;
+        loop = false;
+    }
+
+    void add(int left, int top, int width, int height) {
+        rect.push_back(sf::IntRect(left, top, width, height));
+    }
+
+    sf::IntRect &operator[](const int &i) {
+        return rect[i];
+    }
+
+    const unsigned long size() {
+        return rect.size();
+    }
+
+    void setLoop(const bool v) {
+        loop = v;
+    }
+
+    bool getLoop() {
+        return loop;
+    }
+
+    operator Json::Value() {
+        Json::Value ret;
+        ret["loop"] = loop;
+        ret["time"] = time;
+        for (const auto &i : rect) {
+            Json::Value r;
+            r.append(i.left);
+            r.append(i.top);
+            r.append(i.width);
+            r.append(i.height);
+
+            ret["rect"] = r;
+        }
+        return ret;
+    }
+
+private:
+    bool loop;
+    float time;
+    std::vector<sf::IntRect> rect;
+};
+
+class SpriteResource : Resource<sf::Sprite> {
+public:
+    static void Register(sel::State &state) {
+        SpriteAnimation::Register(state);
+        state["SpriteResource"].SetClass<SpriteResource>(
+
+        );
+    }
+
+    SpriteResource() {
+
+    }
+
+    SpriteResource(TextureResource resource) {
+        this->texture = resource;
+    }
+
+    void addAnimation(std::string name, SpriteAnimation anim) {
+        animations[name] = anim;
+    }
+
+    virtual bool load() {
+        std::ifstream f;
+        f.open(path, std::ios::binary);
+        if (!f.is_open() && !f.good()) {
+            return false;
+        }
+
+        Json::Reader reader;
+        Json::Value root;
+        if (!reader.parse(f, root)) {
+            return false;
+        }
+
+        if (root["animations"].isArray()) {
+            for (const auto &anim : root["animations"]) {
+                SpriteAnimation a;
+                std::string name = anim["name"].asString();
+                for (const auto &r : anim["rect"]) {
+                    a.add(r[0].asInt(), r[1].asInt(), r[2].asInt(), r[3].asInt());
+                }
+                a.setLoop(anim["loop"].asBool());
+                addAnimation(name, a);
+            }
+        }
+
+        return true;
+    }
+
+    operator Json::Value() {
+        Json::Value ret;
+        ret["type"] = "sprite";
+        ret["name"] = name;
+        ret["file"] = path;
+        for (auto &v : animations) {
+            ret["animations"][v.first] = v.second;
+        }
+        return ret;
+    }
+
+    void connect(TextureResource v) {
+        texture = v;
+    }
+
+private:
+    std::map<std::string, SpriteAnimation> animations;
+    TextureResource texture;
 };
 
 #endif //INNER_RESOURCE_H

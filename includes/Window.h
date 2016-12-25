@@ -147,6 +147,10 @@ public:
             }
 
 
+            for (const auto &s : sceneStack) {
+                window.draw(*s);
+            }
+
             window.display();
         }
         ImGui::SFML::Shutdown();

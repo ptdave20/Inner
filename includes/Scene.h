@@ -9,7 +9,7 @@
 
 typedef sel::function<int(float)> LuaRendererFunc;
 
-class Scene {
+class Scene : public sf::Drawable, public sf::Transformable {
 public:
     //CONSTRUCTOR
     Scene() {
@@ -18,8 +18,7 @@ public:
     static void Register(sel::State &state) {
         state["Scene"].SetClass<Scene>(
                 "setName", &Scene::setName,
-                "getName", &Scene::getName,
-                "registerSprite", &Scene::registerSprite
+                "getName", &Scene::getName
         );
     }
 
@@ -31,18 +30,21 @@ public:
         return name;
     }
 
-    void registerSprite(Sprite *sprite) {
-        sprites.push_back(sprite);
-    }
-
-
-
-    void render(const sf::Time &delta) {
+    void update(const sf::Time &delta) {
         // Do all the backend work, then call our luaFunc for other work
     }
+
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
+        auto delta = transform * states.transform;
+        for (const auto &obj : entities) {
+            target.draw(*obj, delta);
+        }
+    }
+
 private:
     std::string name;
-    std::vector<Sprite *> sprites;
+    std::vector<Entity *> entities;
+    sf::Transform transform;
 };
 
 #endif //INNER_SCENE_H

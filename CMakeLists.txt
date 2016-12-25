@@ -35,7 +35,6 @@ set(HEADER_FILES
         includes/Scene.h
         includes/Window.h
         includes/Debug.h
-        includes/Sprite.h
         includes/jsoncpp.cpp
         includes/Resource.h
         includes/Action.h
@@ -47,7 +46,7 @@ set(IMGUI_FILES
         includes/imgui/imgui-SFML.cpp
         includes/imgui/imgui_draw.cpp)
 
-set(SOURCE_FILES main.cpp ${HEADER_FILES} ${IMGUI_FILES} includes/Inner.h)
+set(SOURCE_FILES main.cpp ${HEADER_FILES} ${IMGUI_FILES} includes/Inner.h includes/ParticleEngine.h)
 
 add_executable(Inner ${SOURCE_FILES})
 
