@@ -60,6 +60,13 @@ public:
 		}
 		return nullptr;
 	}
+
+    T &operator*() {
+        if (value) {
+            return *value;
+        }
+        throw std::runtime_error("Null resource");
+    }
 protected:
     std::string path;
     std::string type;
@@ -167,7 +174,7 @@ public:
     }
 };
 
-class TextureResource : Resource<sf::Texture> {
+class TextureResource : public Resource<sf::Texture> {
 public:
     virtual bool load() {
 		if (value) {

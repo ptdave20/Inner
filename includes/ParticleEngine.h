@@ -7,19 +7,24 @@
 #ifndef INNER_PARTICLEENGINE_H
 #define INNER_PARTICLEENGINE_H
 
-class Particle : public sf::Vector2f {
+class Particle : public sf::Sprite {
 
 };
 
-class ParticleEngine : public sf::Drawable {
+class ParticleEngine : public sf::Drawable, sf::Transformable {
 public:
     static void Register(sel::State &state) {
-
+        state["ParticleEngine"].SetClass<ParticleEngine, int>(
+                "setTexture", &ParticleEngine::setTexture,
+                "setUpdateParticle", &ParticleEngine::setUpdateParticle,
+                "setPosition", &ParticleEngine::setPosition
+        );
     }
 
-    ParticleEngine(unsigned int size) : particles(size) {
+    ParticleEngine(int size) : particles(size) {
         for (int i = 0; i < size; i++) {
             particles[i] = Particle();
+            particles[i].setTexture(*texture);
         }
     }
 
@@ -33,10 +38,18 @@ public:
         }
     }
 
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
-        auto xform = states.transform * xform;
-        for (const auto &v : particles) {
+    void setUpdateParticle(sel::function<void(Particle *)> *fun) {
+        updateParticle = fun;
+    }
 
+    void setPosition(float x, float y) {
+        sf::Transformable::setPosition(sf::Vector2f(x, y));
+    }
+
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
+        sf::Transform xform = states.transform * xform;
+        for (const auto &v : particles) {
+            target.draw(v, xform);
         }
     }
 
@@ -44,6 +57,8 @@ private:
     std::vector<Particle> particles;
     TextureResource texture;
     sf::Transform xform;
+    sf::Vector2f high, low;
+    sel::function<void(Particle *)> *updateParticle;
 };
 
 

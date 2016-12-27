@@ -11,7 +11,5 @@ bgMusic:play()
 bgMusic:setLoop(true)
 if window:openConfig("json/main.json") then
     window:createWindow()
-
-
     window:run()
 end
