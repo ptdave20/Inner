@@ -345,4 +345,12 @@ private:
     TextureResource texture;
 };
 
+
+class ResourceManager {
+private:
+    std::vector<TextureResource> textures;
+    std::vector<MusicResource> music;
+    std::vector<SpriteResource> sprites;
+};
+
 #endif //INNER_RESOURCE_H
