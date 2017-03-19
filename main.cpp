@@ -1,9 +1,7 @@
-#include "includes/Inner.h"
+#include "game/InnerWindow.h"
 
 int main() {
-    sel::State state{true};
-    Window::Register(state);
-    state.Load("lua/main.lua");
-
+    InnerWindow game;
+    game.start();
     return 0;
 }

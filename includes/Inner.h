@@ -18,12 +18,12 @@
 // BOOST INCLUDES
 #include <boost/filesystem.hpp>
 
-
 // OTHER INCLUDES
 #include "json/json.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui-SFML.h"
-#include "selene.h"
+#include "chaiscript/chaiscript.hpp"
+#include "chaiscript/chaiscript_stdlib.hpp"
 
 // STD INCLUDES
 #include <fstream>
@@ -35,17 +35,11 @@
 #include <ios>
 #include <locale>
 
-
 // INNER INCLUDES
-#include "Action.h"
-#include "Map.h"
-#include "Menu.h"
-#include "Resource.h"
+#include "typedefs.h"
 #include "Entity.h"
-#include "ParticleEngine.h"
-#include "Tile.h"
 #include "Scene.h"
-#include "Debug.h"
+#include "SceneManager.h"
 #include "Window.h"
 
 #endif //INNER_INNER_H

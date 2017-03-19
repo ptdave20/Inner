@@ -13,23 +13,24 @@ class Entity : public sf::Sprite {
 private:
     std::string name;
     std::string state;
+
+    UpdateFunction<Entity*> updateFunc;
 public:
-    static void Register(sel::State &state) {
-        state["Entity"].SetClass<Entity, std::string>(
-                "getName", &Entity::getName,
-                "setName", &Entity::setName,
-                "getState", &Entity::getState,
-                "setState", &Entity::setState
-        );
-    }
 
     Entity(std::string name) {
         this->name = name;
         this->state = "idle";
     }
 
-    void update(const float time) {
+    void update(const float &time) {
+        updateFunc(this,time);
+    }
+    void update(const sf::Time &time) {
+        updateFunc(this,time.asSeconds());
+    }
 
+    void setUpdate(const UpdateFunction<Entity*> &update) {
+        updateFunc = update;
     }
 
     const std::string getName() const {

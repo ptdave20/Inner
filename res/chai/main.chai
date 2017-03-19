@@ -1,0 +1,9 @@
+var window = Window();
+
+
+window.openConfig("json/main.json");
+window.createWindow();
+window.setProcess(fun(t) {
+
+});
+window.run();

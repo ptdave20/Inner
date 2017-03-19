@@ -15,34 +15,10 @@ public:
         windowMode.bitsPerPixel = 32;;
         title = "Inner";
         style = sf::Style::Default;
-        debug = false;
-
-
     }
-
-    static void Register(sel::State &state) {
-        state["Window"].SetClass<Window>(
-			"openConfig", &Window::openConfig,
-            "createWindow", &Window::createWindow,
-            "run", &Window::run,
-            "stop", &Window::stop);
-
-		// Register IntRect
-		state["IntRect"].SetClass<sf::IntRect>(
-				"left",&sf::IntRect::left,
-				"top",&sf::IntRect::top,
-				"width",&sf::IntRect::width,
-				"height",&sf::IntRect::height
-			);
-
-        // Register our objects
-        Scene::Register(state);
-        MusicResource::Register(state);
-        TextureResource::Register(state);
-    }
+    virtual ~Window() {}
 
     bool openConfig(std::string file) {
-        std::cout << file << std::endl;
         std::ifstream in(file, std::ifstream::binary);
         if (!in.is_open()) {
             return false;
@@ -73,16 +49,6 @@ public:
                 else
                     style ^= sf::Style::Fullscreen;
             }
-            if (w["debug"].isBool()) {
-                debug = w["debug"].asBool();
-            }
-        }
-
-        if (root["initScene"].isString()) {
-            std::shared_ptr<Scene> initScene(new Scene());
-            //initScene->openFile(root["initScene"].asString());
-            std::cout << initScene->getName() << " loaded" << std::endl;
-            sceneStack.push_back(initScene);
         }
 
         in.close();
@@ -92,28 +58,25 @@ public:
     void createWindow() {
         window.create(windowMode, title, style);
 		window.setFramerateLimit(60);
-        if (debug) {
-            ImGui::SFML::Init(window);
-            window.resetGLStates();
-        }
     }
 
     void stop() {
         running = false;
     }
 
-    void run() {
+    void start() {
         sf::Event event;
         sf::Clock clock;
         sf::Time time;
-        Debug _debug;
+
+        createWindow();
+
         running = true;
+
 
         while (running) {
             //
             while (window.pollEvent(event)) {
-                if (debug)
-                    ImGui::SFML::ProcessEvent(event);
                 switch (event.type) {
                     case sf::Event::Closed:
                         running = false;
@@ -122,51 +85,37 @@ public:
                         windowMode.width = event.size.width;
                         windowMode.height = event.size.height;
                         break;
-                    case sf::Event::MouseMoved:
-                        break;
-                    case sf::Event::KeyReleased:
-                        break;
-                    case sf::Event::KeyPressed:
-                        break;
-                    case sf::Event::MouseButtonPressed:
-                        break;
-                    case sf::Event::MouseButtonReleased:
+                    default:
+                        handleEvent(event);
                         break;
                 }
             }
             time = clock.restart();
             window.clear(sf::Color::Black);
 
-            if (debug) {
+            if(sceneManager.size() > 0)
+                window.draw(*sceneManager.back());
 
-                ImGui::SFML::Update(window, time);
-
-                _debug.run(time);
-
-                ImGui::Render();
-            }
-
-
-            for (const auto &s : sceneStack) {
-                window.draw(*s);
-            }
+            handleLogic();
 
             window.display();
         }
-        ImGui::SFML::Shutdown();
         window.close();
     }
 
+    SceneManager& getSceneManager() {
+        return sceneManager;
+    }
+protected:
+    virtual void handleEvent(const sf::Event &) = 0;
+    virtual void handleLogic() = 0;
 private:
     sf::RenderWindow window;
     std::string title;
     sf::VideoMode windowMode;
-    bool debug;
     unsigned int style;
-    std::vector<std::shared_ptr<Scene>> sceneStack;
+    SceneManager sceneManager;
     bool running;
-
-
 };
 
 

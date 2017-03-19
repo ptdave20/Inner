@@ -1,11 +1,17 @@
 cmake_minimum_required(VERSION 3.5)
 project(Inner)
 
-set(CMAKE_CXX_STANDARD 11)
+set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
+
+include(cotire)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -lpthread -ldl")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_COLOR_MAKEFILE ON)
 
+find_package(Threads REQUIRED)
 
 find_package(SFML 2 REQUIRED system window graphics audio)
 if (SFML_FOUND)
@@ -22,23 +28,21 @@ if (Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIR})
 endif ()
 
-find_package(Lua REQUIRED)
-if (LUA_FOUND)
-    include_directories(${LUA_INCLUDE_DIR})
-endif ()
-
 
 set(HEADER_FILES
+        includes/typedefs.h
         includes/Entity.h
         includes/Tile.h
         includes/Map.h
         includes/Scene.h
         includes/Window.h
-        includes/Debug.h
         includes/jsoncpp.cpp
         includes/Resource.h
         includes/Action.h
-        includes/Menu.h)
+        includes/Menu.h
+        includes/Inner.h
+        includes/ParticleEngine.h
+        includes/SceneManager.h)
 
 
 set(IMGUI_FILES
@@ -46,8 +50,14 @@ set(IMGUI_FILES
         includes/imgui/imgui-SFML.cpp
         includes/imgui/imgui_draw.cpp)
 
-set(SOURCE_FILES main.cpp ${HEADER_FILES} ${IMGUI_FILES} includes/Inner.h includes/ParticleEngine.h)
+set(GAME_FILES
+        game/InnerWindow.cpp
+        main.cpp
+        game/SFML_Scene.cpp game/SFML_Scene.h)
+
+set(SOURCE_FILES ${IMGUI_FILES} ${HEADER_FILES} ${GAME_FILES} includes/SceneManager.h)
 
 add_executable(Inner ${SOURCE_FILES})
 
-target_link_libraries(Inner ${SFML_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} ${LUA_LIBRARIES})
+target_link_libraries(Inner ${SFML_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS})
+cotire(Inner)

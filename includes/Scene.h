@@ -7,19 +7,16 @@
 #ifndef INNER_SCENE_H
 #define INNER_SCENE_H
 
-typedef sel::function<int(float)> LuaRendererFunc;
+typedef std::shared_ptr<Entity> SharedEntity;
+typedef std::vector<SharedEntity> VectorEntity;
+typedef std::map<std::string,VectorEntity> LayerEntity;
+
 
 class Scene : public sf::Drawable, public sf::Transformable {
 public:
     //CONSTRUCTOR
     Scene() {
-    }
-
-    static void Register(sel::State &state) {
-        state["Scene"].SetClass<Scene>(
-                "setName", &Scene::setName,
-                "getName", &Scene::getName
-        );
+        chai.add(chaiscript::Std_Lib::library());
     }
 
     void setName(std::string name) {
@@ -31,20 +28,41 @@ public:
     }
 
     void update(const sf::Time &delta) {
-        // Do all the backend work, then call our luaFunc for other work
+        for(auto &s : entities) {
+            for(auto &e : s.second)
+                e->update(delta);
+        }
     }
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
         auto delta = transform * states.transform;
-        for (const auto &obj : entities) {
-            target.draw(*obj, delta);
+
+        for(auto lItr = entities.begin(); lItr!=entities.end(); lItr++) {
+            for(auto itr = lItr->second.begin(); itr!=lItr->second.end(); itr++) {
+                target.draw(*itr->get(),delta);
+            }
         }
     }
 
+    void addLayer(const std::string &name) {
+        VectorEntity v;
+        entities.insert(std::make_pair(name,v));
+    }
+
+    void addEntity(const std::string &name, SharedEntity entity) {
+        entities[name].push_back(entity);
+    }
+
+    virtual bool load() = 0;
+
+
 private:
     std::string name;
-    std::vector<Entity *> entities;
+    LayerEntity entities;
+    std::vector<std::string> renderOrder;
     sf::Transform transform;
+    chaiscript::ChaiScript chai;
+
 };
 
 #endif //INNER_SCENE_H
