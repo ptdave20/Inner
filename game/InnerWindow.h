@@ -13,6 +13,7 @@ public:
     ~InnerWindow();
 
     void eval(std::string file);
+
 private:
     void bind();
     void push_scene(std::shared_ptr<Scene>);

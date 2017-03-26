@@ -12,25 +12,30 @@ typedef std::vector<SharedEntity> VectorEntity;
 typedef std::map<std::string,VectorEntity> LayerEntity;
 
 
-class Scene : public BaseObject, protected Resources {
+class Scene : public BaseObject, public Resources {
 public:
     //CONSTRUCTOR
     Scene() {
-        this->setName("Unnamed Scene");
+        setName("Unnamed Scene");
     }
 
     static chaiscript::ModulePtr Library() {
         chaiscript::ModulePtr ret = std::make_shared<chaiscript::Module>();
 
-        ret->add(chaiscript::base_class<BaseObject,Scene>())
-                .add(chaiscript::user_type<Scene>(),"Scene")
+
+        ret->add(chaiscript::user_type<Scene>(),"Scene")
+                .add(chaiscript::constructor<Scene()>(),"Scene")
                 .add(chaiscript::fun(&Scene::loadFont),"loadFont")
                 .add(chaiscript::fun(&Scene::loadSfx),"loadSfx")
-                .add(chaiscript::fun(&Scene::loadTexture),"loadTexture");
+                .add(chaiscript::fun(&Scene::loadTexture),"loadTexture")
+                .add(chaiscript::fun(&Scene::setUpdate),"setUpdate");
+        ret->add(chaiscript::base_class<BaseObject,Scene>());
         return ret;
     }
 
     void update(const sf::Time &delta) {
+        if(updateFunc)
+            updateFunc(delta.asSeconds());
         for(auto &s : entities) {
             for(auto &e : s.second)
                 e->update(delta.asSeconds());
@@ -38,6 +43,8 @@ public:
     }
 
     void update(const float &delta) {
+        if(updateFunc)
+            updateFunc(delta);
         for(auto &s : entities) {
             for(auto &e : s.second)
                 e->update(delta);
@@ -63,13 +70,13 @@ public:
         entities[name].push_back(entity);
     }
 
-    virtual bool load() = 0;
-
-
+    void setUpdate(std::function<void(float)> func) {
+        updateFunc = func;
+    }
 private:
     LayerEntity entities;
     sf::Transform transform;
-
+    std::function<void(float)> updateFunc;
 };
 
 #endif //INNER_SCENE_H

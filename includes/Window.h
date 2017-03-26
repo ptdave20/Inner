@@ -93,8 +93,11 @@ public:
             time = clock.restart();
             window.clear(sf::Color::Black);
 
-            if(sceneManager.size() > 0)
+            if(sceneManager.size() > 0) {
+                sceneManager.back()->update(time);
                 window.draw(*sceneManager.back());
+            }
+
 
             handleLogic();
 

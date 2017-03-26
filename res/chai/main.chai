@@ -1,6 +1,12 @@
 window_openConfig("json/main.json");
 
-var obj = BaseObject();
-obj.setName("Test Object");
 
-obj.print();
+
+var obj2 = Scene();
+obj2.setName("Test Scene");
+
+obj2.setUpdate(fun[obj2](delta) {
+    print(delta);
+});
+
+window_pushScene(obj2);

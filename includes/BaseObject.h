@@ -17,6 +17,7 @@ public:
     BaseObject() {
         name = "Unnamed Object";
     }
+    virtual ~BaseObject() = default;
 
     // Called when the object needs to be reset. Either a scene is over or needs to be reused
     virtual void reset() {
@@ -44,42 +45,47 @@ public:
         // Draw sprites or whatever here
     }
 
+    void setPosition(float x, float y) {
+        sf::Transformable::setPosition(x,y);
+    }
+
+    void setOrigin(float x, float y) {
+        sf::Transformable::setOrigin(x,y);
+    }
+
+    void setRotation(float x) {
+        sf::Transformable::setRotation(x);
+    }
+
+    void setScale(float x,float y) {
+        sf::Transformable::setScale(x,y);
+    }
+
     static chaiscript::ModulePtr Library() {
         chaiscript::ModulePtr ret = std::make_shared<chaiscript::Module>();
 
+
+        ret->add(chaiscript::constructor<sf::Transformable()>(),"Transformable")
+                .add(chaiscript::fun(&sf::Transformable::getInverseTransform),"getInverseTransform")
+                .add(chaiscript::fun(&sf::Transformable::getOrigin),"getOrigin")
+                .add(chaiscript::fun(&sf::Transformable::getPosition),"getPosition")
+                .add(chaiscript::fun(&sf::Transformable::getRotation),"getRotation")
+                .add(chaiscript::fun(&sf::Transformable::setRotation),"setRotation")
+                .add(chaiscript::fun(&sf::Transformable::getScale),"getScale");
+        ret->add(chaiscript::base_class<sf::Transformable,BaseObject>());
         ret->add(chaiscript::constructor<BaseObject()>(), "BaseObject")
                 .add(chaiscript::fun(&BaseObject::getName), "getName")
                 .add(chaiscript::fun(&BaseObject::setName), "setName")
+                .add(chaiscript::fun(&BaseObject::setPosition),"setPosition")
+                .add(chaiscript::fun(&BaseObject::setOrigin),"setOrigin")
+                .add(chaiscript::fun(&BaseObject::setRotation),"setRotation")
+                .add(chaiscript::fun(&BaseObject::setScale),"setScale")
                 .add(chaiscript::fun(&BaseObject::print), "print");
         return ret;
     }
 
-    BaseObject &operator()(chaiscript::ChaiScript &chai) {
-        chai.add(chaiscript::user_type<sf::Drawable>(), "Drawable");
-        chai.add(chaiscript::user_type<sf::Transformable>(), "Transformable");
-        chai.add(chaiscript::user_type<BaseObject>(), "BaseObject")
-                .add(chaiscript::fun(&BaseObject::getName), "getName")
-                .add(chaiscript::fun(&BaseObject::reset), "reset")
-                .add(chaiscript::fun(&BaseObject::getScale), "getScale")
-                .add(chaiscript::fun(&BaseObject::getOrigin), "getOrigin")
-                .add(chaiscript::fun(&BaseObject::getRotation), "getRotation")
-                .add(chaiscript::fun(&BaseObject::setRotation), "setRotation")
-                .add(chaiscript::fun(&BaseObject::getTransform), "getTransform")
-                .add(chaiscript::fun(&BaseObject::getInverseTransform), "getInverseTransform")
-                .add(chaiscript::fun(&BaseObject::getPosition), "getPosition");
-    }
-
     void print() {
-        std::cout << *this << std::endl;
-    }
-
-    operator const char*() {
-        return std::string(getName() + " ( " + std::to_string(getPosition().x) + " x " + std::to_string(getPosition().y) + " )").c_str();
-    }
-    friend std::ostream &operator<<(std::ostream &os, const BaseObject &entity) {
-        using namespace std;
-        os << entity;
-        return os;
+        std::cout << getName() + " ( " + std::to_string(getPosition().x) + " x " + std::to_string(getPosition().y) + " )" << std::endl;
     }
 };
 

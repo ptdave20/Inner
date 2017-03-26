@@ -18,6 +18,7 @@ void InnerWindow::bind() {
     chai.add(chaiscript::fun(&InnerWindow::openConfig,this),"window_openConfig");
     chai.add(chaiscript::fun(&InnerWindow::push_scene,this),"window_pushScene");
     chai.add(chaiscript::fun(&InnerWindow::pop_scene,this),"window_popScene");
+    chai.add(chaiscript::fun(&InnerWindow::eval,this),"eval");
     chai.add(BaseObject::Library());
     chai.add(Scene::Library());
 
