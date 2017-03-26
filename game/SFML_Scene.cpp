@@ -5,7 +5,6 @@
 #include "SFML_Scene.h"
 
 bool SFML_Scene::load() {
-    addLayer("logo");
-
+    std::cout << loadFont("quiet_horror","fonts/quiet_horror_story.ttf") << std::endl;
     return true;
 }

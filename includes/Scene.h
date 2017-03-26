@@ -7,27 +7,37 @@
 #ifndef INNER_SCENE_H
 #define INNER_SCENE_H
 
-typedef std::shared_ptr<Entity> SharedEntity;
+typedef std::shared_ptr<BaseObject> SharedEntity;
 typedef std::vector<SharedEntity> VectorEntity;
 typedef std::map<std::string,VectorEntity> LayerEntity;
 
 
-class Scene : public sf::Drawable, public sf::Transformable {
+class Scene : public BaseObject, protected Resources {
 public:
     //CONSTRUCTOR
     Scene() {
-        chai.add(chaiscript::Std_Lib::library());
+        this->setName("Unnamed Scene");
     }
 
-    void setName(std::string name) {
-        this->name = name;
-    }
+    static chaiscript::ModulePtr Library() {
+        chaiscript::ModulePtr ret = std::make_shared<chaiscript::Module>();
 
-    std::string getName() {
-        return name;
+        ret->add(chaiscript::base_class<BaseObject,Scene>())
+                .add(chaiscript::user_type<Scene>(),"Scene")
+                .add(chaiscript::fun(&Scene::loadFont),"loadFont")
+                .add(chaiscript::fun(&Scene::loadSfx),"loadSfx")
+                .add(chaiscript::fun(&Scene::loadTexture),"loadTexture");
+        return ret;
     }
 
     void update(const sf::Time &delta) {
+        for(auto &s : entities) {
+            for(auto &e : s.second)
+                e->update(delta.asSeconds());
+        }
+    }
+
+    void update(const float &delta) {
         for(auto &s : entities) {
             for(auto &e : s.second)
                 e->update(delta);
@@ -57,11 +67,8 @@ public:
 
 
 private:
-    std::string name;
     LayerEntity entities;
-    std::vector<std::string> renderOrder;
     sf::Transform transform;
-    chaiscript::ChaiScript chai;
 
 };
 

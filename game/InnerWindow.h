@@ -11,6 +11,14 @@ class InnerWindow : public Window {
 public:
     InnerWindow();
     ~InnerWindow();
+
+    void eval(std::string file);
+private:
+    void bind();
+    void push_scene(std::shared_ptr<Scene>);
+    void pop_scene();
+    chaiscript::ChaiScript chai;
+
 protected:
     void handleEvent(const sf::Event &e);
     void handleLogic();

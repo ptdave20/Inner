@@ -20,8 +20,8 @@
 
 // OTHER INCLUDES
 #include "json/json.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui-SFML.h"
+//#include "imgui/imgui.h"
+//#include "imgui/imgui-SFML.h"
 #include "chaiscript/chaiscript.hpp"
 #include "chaiscript/chaiscript_stdlib.hpp"
 
@@ -37,7 +37,8 @@
 
 // INNER INCLUDES
 #include "typedefs.h"
-#include "Entity.h"
+#include "Resources.h"
+#include "BaseObject.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Window.h"

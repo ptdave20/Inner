@@ -9,3 +9,7 @@ http://creativecommons.org/licenses/by/3.0/
 Unseen Horrors Kevin MacLeod (incompetech.com)
 Licensed under Creative Commons: By Attribution 3.0 License
 http://creativecommons.org/licenses/by/3.0/
+
+/res/fonts/quiet_horror_story.ttf
+---------------------------
+http://www.dafont.com/quiet-horror-story.font

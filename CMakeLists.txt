@@ -31,18 +31,12 @@ endif ()
 
 set(HEADER_FILES
         includes/typedefs.h
-        includes/Entity.h
-        includes/Tile.h
-        includes/Map.h
+        includes/BaseObject.h
         includes/Scene.h
         includes/Window.h
         includes/jsoncpp.cpp
-        includes/Resource.h
-        includes/Action.h
-        includes/Menu.h
         includes/Inner.h
-        includes/ParticleEngine.h
-        includes/SceneManager.h)
+        includes/SceneManager.h includes/Resources.h)
 
 
 set(IMGUI_FILES

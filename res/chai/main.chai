@@ -1,9 +1,6 @@
-var window = Window();
+window_openConfig("json/main.json");
 
+var obj = BaseObject();
+obj.setName("Test Object");
 
-window.openConfig("json/main.json");
-window.createWindow();
-window.setProcess(fun(t) {
-
-});
-window.run();
+obj.print();
