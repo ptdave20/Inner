@@ -11,10 +11,12 @@
 class MenuScene : public Scene {
 private:
     std::vector<sf::Text> menuOptions;
+    std::function<void(int)> selectedFunc;
     unsigned int selectedOption;
     sf::Font normalFont,selectedFont;
     sf::Color normalColor,selectedColor;
     unsigned int normalSize,selectedSize;
+    int lineSpacing;
 public:
     static chaiscript::ModulePtr Library() {
         chaiscript::ModulePtr ret = std::make_shared<chaiscript::Module>();
@@ -28,7 +30,8 @@ public:
                 .add(chaiscript::fun(&MenuScene::setNormalFont),"setNormalFont")
                 .add(chaiscript::fun(&MenuScene::setSelectedFontColor),"setSelectedFontColor")
                 .add(chaiscript::fun(&MenuScene::setSelectedFontSize),"setSelectedFontSize")
-                .add(chaiscript::fun(&MenuScene::setSelectedFont),"setSelectedFont");
+                .add(chaiscript::fun(&MenuScene::setSelectedFont), "setSelectedFont")
+                .add(chaiscript::fun(&MenuScene::setSelectedFunction), "setSelectedFunction");
         ret->add(chaiscript::base_class<BaseObject,MenuScene>());
         ret->add(chaiscript::base_class<Resources,MenuScene>());
         ret->add(chaiscript::base_class<Scene,MenuScene>());
@@ -39,6 +42,7 @@ public:
         selectedOption = -1;
         normalSize = 30;
         selectedSize = 30;
+        lineSpacing = 5;
     }
 
     void position() {
@@ -46,9 +50,13 @@ public:
         for(auto &o : menuOptions) {
             auto pos = o.getPosition();
             pos.y = yOffSet;
-            yOffSet+=o.getLocalBounds().height;
+            yOffSet += o.getLocalBounds().height + lineSpacing;
             o.setPosition(pos);
         }
+    }
+
+    void setSelectedFunction(std::function<void(int)> f) {
+        selectedFunc = f;
     }
 
     unsigned int totalMenuOptions() const {
@@ -135,6 +143,36 @@ public:
         //std::cout << menuOptions.size() << std::endl;
         for(auto i = 0; i<menuOptions.size(); i++) {
             target.draw(menuOptions[i],states);
+        }
+    }
+
+    void handleEvent(sf::Event &event) override {
+        if (event.type == sf::Event::MouseMoved) {
+            auto m = sf::Vector2f(event.mouseMove.x, event.mouseMove.y);
+            for (auto i = 0; i < menuOptions.size(); i++) {
+                if (menuOptions[i].getGlobalBounds().contains(m) && selectedOption != i) {
+                    menuOptions[i].setFont(selectedFont);
+                    menuOptions[i].setColor(selectedColor);
+                    menuOptions[i].setCharacterSize(selectedSize);
+                    selectedOption = i;
+                } else if (!menuOptions[i].getGlobalBounds().contains(m)) {
+                    menuOptions[i].setFont(normalFont);
+                    menuOptions[i].setColor(normalColor);
+                    menuOptions[i].setCharacterSize(normalSize);
+                }
+            }
+            position();
+        }
+        if (event.type == sf::Event::MouseButtonReleased) {
+            auto m = sf::Vector2f(event.mouseMove.x, event.mouseMove.y);
+            for (const auto &o : menuOptions) {
+                if (o.getGlobalBounds().contains(m)) {
+                    // Trigger option event
+                    if (selectedFunc)
+                        selectedFunc(selectedOption);
+
+                }
+            }
         }
     }
 

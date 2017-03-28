@@ -85,10 +85,10 @@ public:
                         windowMode.width = event.size.width;
                         windowMode.height = event.size.height;
                         break;
-                    default:
-                        handleEvent(event);
-                        break;
                 }
+                // Pass the even to the scene
+                if (sceneManager.size() > 0)
+                    sceneManager.back()->handleEvent(event);
             }
             time = clock.restart();
             window.clear(sf::Color::Black);
@@ -98,9 +98,6 @@ public:
                 window.draw(*sceneManager.back());
             }
 
-
-            handleLogic();
-
             window.display();
         }
         window.close();
@@ -109,9 +106,6 @@ public:
     SceneManager& getSceneManager() {
         return sceneManager;
     }
-protected:
-    virtual void handleEvent(const sf::Event &) = 0;
-    virtual void handleLogic() = 0;
 private:
     sf::RenderWindow window;
     std::string title;

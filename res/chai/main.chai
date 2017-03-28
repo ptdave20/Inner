@@ -11,8 +11,17 @@ if(mainMenu.loadFont("horror_font","./fonts/quiet_horror_story.ttf")) {
     mainMenu.setSelectedFont("horror_font");
     mainMenu.setNormalFontColor(255,255,255,255);
     mainMenu.setNormalFontSize(100);
+    mainMenu.setSelectedFontColor(255,0,0,255);
+    mainMenu.setSelectedFontSize(100);
     mainMenu.addOption("Start");
+    mainMenu.addOption("Options");
     mainMenu.addOption("Exit");
+    mainMenu.setSelectedFunction(fun(opt) {
+        print(opt);
+        if(opt == 2) {
+            stop();
+        }
+    });
 }
 
 window_pushScene(mainMenu);
