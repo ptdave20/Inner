@@ -45,6 +45,10 @@ public:
         // Draw sprites or whatever here
     }
 
+    virtual void handleEvent(sf::Event &event) {
+        // Do nothing by default
+    }
+
     void setPosition(float x, float y) {
         sf::Transformable::setPosition(x,y);
     }
