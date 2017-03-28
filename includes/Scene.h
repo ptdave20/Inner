@@ -22,18 +22,28 @@ public:
     static chaiscript::ModulePtr Library() {
         chaiscript::ModulePtr ret = std::make_shared<chaiscript::Module>();
 
+        ret->add(chaiscript::user_type<sf::Font>(),"Font");
+        ret->add(chaiscript::constructor<sf::Font()>(),"Font");
+
+        ret->add(chaiscript::user_type<Resources>(),"Resources")
+                .add(chaiscript::constructor<Resources()>(),"Resources")
+                .add(chaiscript::fun(&Resources::loadFont),"loadFont")
+                .add(chaiscript::fun(&Resources::getFont),"getFont");
 
         ret->add(chaiscript::user_type<Scene>(),"Scene")
                 .add(chaiscript::constructor<Scene()>(),"Scene")
                 .add(chaiscript::fun(&Scene::loadFont),"loadFont")
                 .add(chaiscript::fun(&Scene::loadSfx),"loadSfx")
                 .add(chaiscript::fun(&Scene::loadTexture),"loadTexture")
-                .add(chaiscript::fun(&Scene::setUpdate),"setUpdate");
+                .add(chaiscript::fun(&Scene::setUpdate),"setUpdate")
+                .add(chaiscript::fun(&Scene::addLayer),"addLayer")
+                .add(chaiscript::fun(&Scene::addEntity),"addEntity");
         ret->add(chaiscript::base_class<BaseObject,Scene>());
+        ret->add(chaiscript::base_class<Resources,Scene>());
         return ret;
     }
 
-    void update(const sf::Time &delta) {
+    void update(const sf::Time &delta) override {
         if(updateFunc)
             updateFunc(delta.asSeconds());
         for(auto &s : entities) {
@@ -42,7 +52,7 @@ public:
         }
     }
 
-    void update(const float &delta) {
+    void update(const float &delta) override {
         if(updateFunc)
             updateFunc(delta);
         for(auto &s : entities) {

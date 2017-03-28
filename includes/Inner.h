@@ -43,4 +43,7 @@
 #include "SceneManager.h"
 #include "Window.h"
 
+// INNER OBJECTS
+#include "Objects/MenuScene.h"
+
 #endif //INNER_INNER_H

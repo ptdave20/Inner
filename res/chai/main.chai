@@ -2,11 +2,17 @@ window_openConfig("json/main.json");
 
 
 
-var obj2 = Scene();
-obj2.setName("Test Scene");
+var mainMenu = MenuScene();
+mainMenu.setName("Main Menu");
 
-obj2.setUpdate(fun[obj2](delta) {
-    print(delta);
-});
+if(mainMenu.loadFont("horror_font","./fonts/quiet_horror_story.ttf")) {
+    print("Loaded font");
+    mainMenu.setNormalFont("horror_font");
+    mainMenu.setSelectedFont("horror_font");
+    mainMenu.setNormalFontColor(255,255,255,255);
+    mainMenu.setNormalFontSize(100);
+    mainMenu.addOption("Start");
+    mainMenu.addOption("Exit");
+}
 
-window_pushScene(obj2);
+window_pushScene(mainMenu);

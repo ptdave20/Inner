@@ -119,7 +119,7 @@
     <ClInclude Include="includes\json\json-forwards.h" />
     <ClInclude Include="includes\json\json.h" />
     <ClInclude Include="includes\Map.h" />
-    <ClInclude Include="includes\Menu.h" />
+    <ClInclude Include="includes\MenuScene.h" />
     <ClInclude Include="includes\Resource.h" />
     <ClInclude Include="includes\Scene.h" />
     <ClInclude Include="includes\selene.h" />

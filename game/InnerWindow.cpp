@@ -21,7 +21,7 @@ void InnerWindow::bind() {
     chai.add(chaiscript::fun(&InnerWindow::eval,this),"eval");
     chai.add(BaseObject::Library());
     chai.add(Scene::Library());
-
+    chai.add(MenuScene::Library());
 }
 
 void InnerWindow::push_scene(std::shared_ptr<Scene> s) {

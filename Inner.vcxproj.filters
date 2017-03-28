@@ -80,7 +80,7 @@
     <ClInclude Include="includes\Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="includes\Menu.h">
+    <ClInclude Include="includes\MenuScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="includes\Resource.h">
