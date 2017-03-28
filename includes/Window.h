@@ -77,14 +77,12 @@ public:
         while (running) {
             //
             while (window.pollEvent(event)) {
-                switch (event.type) {
-                    case sf::Event::Closed:
-                        running = false;
-                        break;
-                    case sf::Event::Resized:
-                        windowMode.width = event.size.width;
-                        windowMode.height = event.size.height;
-                        break;
+                if (event.type == sf::Event::Closed) {
+                    running = false;
+                }
+                if (event.type == sf::Event::Resized) {
+                    windowMode.width = event.size.width;
+                    windowMode.height = event.size.height;
                 }
                 // Pass the even to the scene
                 if (sceneManager.size() > 0)

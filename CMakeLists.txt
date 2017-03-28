@@ -36,7 +36,7 @@ set(HEADER_FILES
         includes/Window.h
         includes/jsoncpp.cpp
         includes/Inner.h
-        includes/SceneManager.h includes/Resources.h includes/Objects/MenuScene.h)
+        includes/SceneManager.h includes/Resources.h includes/Objects/MenuScene.h includes/Objects/FadeInOutScene.h)
 
 
 set(IMGUI_FILES

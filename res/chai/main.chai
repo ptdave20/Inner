@@ -6,7 +6,6 @@ var mainMenu = MenuScene();
 mainMenu.setName("Main Menu");
 
 if(mainMenu.loadFont("horror_font","./fonts/quiet_horror_story.ttf")) {
-    print("Loaded font");
     mainMenu.setNormalFont("horror_font");
     mainMenu.setSelectedFont("horror_font");
     mainMenu.setNormalFontColor(255,255,255,255);
@@ -17,7 +16,6 @@ if(mainMenu.loadFont("horror_font","./fonts/quiet_horror_story.ttf")) {
     mainMenu.addOption("Options");
     mainMenu.addOption("Exit");
     mainMenu.setSelectedFunction(fun(opt) {
-        print(opt);
         if(opt == 2) {
             stop();
         }

@@ -23,6 +23,7 @@ void InnerWindow::bind() {
     chai.add(BaseObject::Library());
     chai.add(Scene::Library());
     chai.add(MenuScene::Library());
+    chai.add(FadeInOutScene::Library());
 }
 
 void InnerWindow::push_scene(std::shared_ptr<Scene> s) {
