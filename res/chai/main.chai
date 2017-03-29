@@ -16,6 +16,12 @@ if(mainMenu.loadFont("horror_font","./fonts/quiet_horror_story.ttf")) {
     mainMenu.addOption("Options");
     mainMenu.addOption("Exit");
     mainMenu.setSelectedFunction(fun(opt) {
+        if(opt == 0) {
+            // Start
+        }
+        if(opt == 1) {
+            // Options
+        }
         if(opt == 2) {
             stop();
         }

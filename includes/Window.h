@@ -18,6 +18,13 @@ public:
     }
     virtual ~Window() {}
 
+    static chaiscript::ModulePtr Library() {
+        using namespace chaiscript;
+        ModulePtr ret = std::make_shared<Module>();
+
+        return ret;
+    }
+
     bool openConfig(std::string file) {
         std::ifstream in(file, std::ifstream::binary);
         if (!in.is_open()) {
@@ -75,7 +82,6 @@ public:
 
 
         while (running) {
-            //
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::Closed) {
                     running = false;
@@ -85,15 +91,15 @@ public:
                     windowMode.height = event.size.height;
                 }
                 // Pass the even to the scene
-                if (sceneManager.size() > 0)
-                    sceneManager.back()->handleEvent(event);
+                if (scenes.size() > 0)
+                    scenes.back()->handleEvent(event);
             }
             time = clock.restart();
             window.clear(sf::Color::Black);
 
-            if(sceneManager.size() > 0) {
-                sceneManager.back()->update(time);
-                window.draw(*sceneManager.back());
+            if (scenes.size() > 0) {
+                scenes.back()->update(time.asSeconds());
+                window.draw(*scenes.back());
             }
 
             window.display();
@@ -101,15 +107,26 @@ public:
         window.close();
     }
 
-    SceneManager& getSceneManager() {
-        return sceneManager;
+    auto sceneCount() {
+        return scenes.size();
     }
+
+    void scene_push_back(std::shared_ptr<Scene> scene) {
+        scenes.push_back(scene);
+        scenes.back()->init(windowMode.width, windowMode.height);
+    }
+
+    void scene_pop_back() {
+        scenes.back()->deinit();
+        scenes.pop_back();
+    }
+
 private:
+    std::vector<std::shared_ptr<Scene>> scenes;
     sf::RenderWindow window;
     std::string title;
     sf::VideoMode windowMode;
     unsigned int style;
-    SceneManager sceneManager;
     bool running;
 };
 

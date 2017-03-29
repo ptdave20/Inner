@@ -10,7 +10,7 @@
 
 class FadeInOutScene : public Scene {
 public:
-    chaiscript::ModulePtr Library() {
+    static chaiscript::ModulePtr Library() {
         auto ret = std::make_shared<chaiscript::Module>();
 
         ret->add(chaiscript::user_type<FadeInOutScene>(), "FadeInOutScene");

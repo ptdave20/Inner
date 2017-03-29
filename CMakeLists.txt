@@ -36,7 +36,9 @@ set(HEADER_FILES
         includes/Window.h
         includes/jsoncpp.cpp
         includes/Inner.h
-        includes/SceneManager.h includes/Resources.h includes/Objects/MenuScene.h includes/Objects/FadeInOutScene.h)
+        includes/Resources.h
+        includes/Objects/MenuScene.h
+        includes/Objects/FadeInOutScene.h)
 
 
 set(IMGUI_FILES
@@ -47,9 +49,9 @@ set(IMGUI_FILES
 set(GAME_FILES
         game/InnerWindow.cpp
         main.cpp
-        game/SFML_Scene.cpp game/SFML_Scene.h)
+        )
 
-set(SOURCE_FILES ${IMGUI_FILES} ${HEADER_FILES} ${GAME_FILES} includes/SceneManager.h)
+set(SOURCE_FILES ${IMGUI_FILES} ${HEADER_FILES} ${GAME_FILES})
 
 add_executable(Inner ${SOURCE_FILES})
 

@@ -40,7 +40,6 @@
 #include "Resources.h"
 #include "BaseObject.h"
 #include "Scene.h"
-#include "SceneManager.h"
 #include "Window.h"
 
 // INNER OBJECTS

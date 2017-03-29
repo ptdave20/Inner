@@ -3,7 +3,6 @@
 //
 
 #include "InnerWindow.h"
-#include "SFML_Scene.h"
 
 InnerWindow::InnerWindow() {
     bind();
@@ -27,11 +26,11 @@ void InnerWindow::bind() {
 }
 
 void InnerWindow::push_scene(std::shared_ptr<Scene> s) {
-    getSceneManager().push_back(s);
+    this->scene_push_back(s);
 }
 
 void InnerWindow::pop_scene() {
-    getSceneManager().pop_back();
+    this->scene_pop_back();
 }
 
 void InnerWindow::handleEvent(const sf::Event &e) {

@@ -19,6 +19,14 @@ public:
         setName("Unnamed Scene");
     }
 
+    virtual void init(unsigned int screenWidth, unsigned int screenHeight) {
+
+    }
+
+    virtual void deinit() {
+
+    }
+
     static chaiscript::ModulePtr Library() {
         chaiscript::ModulePtr ret = std::make_shared<chaiscript::Module>();
 
