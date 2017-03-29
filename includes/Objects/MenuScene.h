@@ -17,6 +17,9 @@ private:
     sf::Color normalColor,selectedColor;
     unsigned int normalSize,selectedSize;
     int lineSpacing;
+    int winWidth, winHeight;
+    float vAlign, hAlign;
+
 public:
     static chaiscript::ModulePtr Library() {
         chaiscript::ModulePtr ret = std::make_shared<chaiscript::Module>();
@@ -31,7 +34,11 @@ public:
                 .add(chaiscript::fun(&MenuScene::setSelectedFontColor),"setSelectedFontColor")
                 .add(chaiscript::fun(&MenuScene::setSelectedFontSize),"setSelectedFontSize")
                 .add(chaiscript::fun(&MenuScene::setSelectedFont), "setSelectedFont")
-                .add(chaiscript::fun(&MenuScene::setSelectedFunction), "setSelectedFunction");
+                .add(chaiscript::fun(&MenuScene::setSelectedFunction), "setSelectedFunction")
+                .add(chaiscript::fun(&MenuScene::setVAlign), "setVAlign")
+                .add(chaiscript::fun(&MenuScene::getVAlign), "getVAlign")
+                .add(chaiscript::fun(&MenuScene::setHAlign), "setHAlign")
+                .add(chaiscript::fun(&MenuScene::getHAlign), "getHAlign");
         ret->add(chaiscript::base_class<BaseObject,MenuScene>());
         ret->add(chaiscript::base_class<Resources,MenuScene>());
         ret->add(chaiscript::base_class<Scene,MenuScene>());
@@ -43,16 +50,48 @@ public:
         normalSize = 30;
         selectedSize = 30;
         lineSpacing = 5;
+        vAlign = 0;
+        hAlign = 0;
     }
 
     void position() {
-        auto yOffSet = 0;
+        auto totalYSize = 0;
+        auto longestWidth = 0;
+        for (auto &o : menuOptions) {
+            totalYSize += o.getLocalBounds().height + lineSpacing;
+            if (longestWidth < o.getLocalBounds().width)
+                longestWidth = o.getLocalBounds().width;
+        }
+
+
+        auto yOffSet = vAlign * winHeight - totalYSize;
+        auto xOffset = hAlign * winWidth - longestWidth;
+
         for(auto &o : menuOptions) {
             auto pos = o.getPosition();
             pos.y = yOffSet;
+            pos.x = xOffset;
             yOffSet += o.getLocalBounds().height + lineSpacing;
             o.setPosition(pos);
         }
+    }
+
+    float getVAlign() const {
+        return vAlign;
+    }
+
+    void setVAlign(float vAlign) {
+        MenuScene::vAlign = vAlign;
+        position();
+    }
+
+    float getHAlign() const {
+        return hAlign;
+    }
+
+    void setHAlign(float hAlign) {
+        MenuScene::hAlign = hAlign;
+        position();
     }
 
     void setSelectedFunction(std::function<void(int)> f) {
@@ -174,6 +213,15 @@ public:
                 }
             }
         }
+    }
+
+    void init(unsigned int screenWidth, unsigned int screenHeight) override {
+        winWidth = screenWidth;
+        winHeight = screenHeight;
+    }
+
+    void deinit() override {
+
     }
 
 };
