@@ -179,9 +179,16 @@ public:
     }
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
-        //std::cout << menuOptions.size() << std::endl;
         for(auto i = 0; i<menuOptions.size(); i++) {
             target.draw(menuOptions[i],states);
+            auto s = sf::RectangleShape();
+            s.setFillColor(sf::Color::Transparent);
+            s.setOutlineColor(sf::Color::Blue);
+            s.setOutlineThickness(1);
+            auto size = menuOptions[i].getGlobalBounds();
+            s.setSize(sf::Vector2f(size.width, size.height));
+            s.setPosition(menuOptions[i].getPosition());
+            target.draw(s);
         }
     }
 
@@ -198,20 +205,29 @@ public:
                     menuOptions[i].setFont(normalFont);
                     menuOptions[i].setColor(normalColor);
                     menuOptions[i].setCharacterSize(normalSize);
+                    if (i == selectedOption)
+                        selectedOption = -1;
                 }
             }
             position();
         }
         if (event.type == sf::Event::MouseButtonReleased) {
-            auto m = sf::Vector2f(event.mouseMove.x, event.mouseMove.y);
+            auto m = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
             for (const auto &o : menuOptions) {
                 if (o.getGlobalBounds().contains(m)) {
                     // Trigger option event
+                    std::cout << selectedOption << std::endl;
                     if (selectedFunc)
                         selectedFunc(selectedOption);
 
                 }
             }
+        }
+
+        if (event.type == sf::Event::Resized) {
+            winWidth = event.size.width;
+            winHeight = event.size.height;
+            position();
         }
     }
 
