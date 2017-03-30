@@ -45,5 +45,6 @@
 // INNER OBJECTS
 #include "Objects/MenuScene.h"
 #include "Objects/FadeInOutScene.h"
+#include "Objects/ParticleEngine.h"
 
 #endif //INNER_INNER_H

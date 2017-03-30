@@ -89,6 +89,7 @@ public:
                 if (event.type == sf::Event::Resized) {
                     windowMode.width = event.size.width;
                     windowMode.height = event.size.height;
+                    window.setView(sf::View(sf::FloatRect(0, 0, windowMode.width, windowMode.height)));
                 }
                 // Pass the even to the scene
                 if (scenes.size() > 0)

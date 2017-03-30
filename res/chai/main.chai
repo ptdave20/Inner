@@ -31,4 +31,6 @@ if(mainMenu.loadFont("horror_font","./fonts/quiet_horror_story.ttf")) {
     });
 }
 
+var e = ParticleEngine(1000);
+
 window_pushScene(mainMenu);

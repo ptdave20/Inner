@@ -181,14 +181,6 @@ public:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
         for(auto i = 0; i<menuOptions.size(); i++) {
             target.draw(menuOptions[i],states);
-            auto s = sf::RectangleShape();
-            s.setFillColor(sf::Color::Transparent);
-            s.setOutlineColor(sf::Color::Blue);
-            s.setOutlineThickness(1);
-            auto size = menuOptions[i].getGlobalBounds();
-            s.setSize(sf::Vector2f(size.width, size.height));
-            s.setPosition(menuOptions[i].getPosition());
-            target.draw(s);
         }
     }
 
@@ -216,7 +208,6 @@ public:
             for (const auto &o : menuOptions) {
                 if (o.getGlobalBounds().contains(m)) {
                     // Trigger option event
-                    std::cout << selectedOption << std::endl;
                     if (selectedFunc)
                         selectedFunc(selectedOption);
 
