@@ -13,8 +13,13 @@ public:
     float posX, posY;
     float life;
     float decay;
+    float r, g, b, a;
 
     Particle() {
+        r = 0;
+        g = 0;
+        b = 0;
+        a = 0;
         vectorX = 0;
         vectorY = 0;
         posX = 0;
@@ -43,7 +48,11 @@ public:
                 .add(chaiscript::fun(&Particle::vectorX), "vectorX")
                 .add(chaiscript::fun(&Particle::vectorY), "vectorY")
                 .add(chaiscript::fun(&Particle::posX), "posX")
-                .add(chaiscript::fun(&Particle::posY), "posY");
+                .add(chaiscript::fun(&Particle::posY), "posY")
+                .add(chaiscript::fun(&Particle::r), "r")
+                .add(chaiscript::fun(&Particle::g), "g")
+                .add(chaiscript::fun(&Particle::b), "b")
+                .add(chaiscript::fun(&Particle::a), "a");
         return ret;
     }
 

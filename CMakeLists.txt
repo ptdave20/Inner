@@ -38,7 +38,9 @@ set(HEADER_FILES
         includes/Inner.h
         includes/Resources.h
         includes/Objects/MenuScene.h
-        includes/Objects/FadeInOutScene.h includes/Objects/ParticleEngine.h)
+        includes/Objects/FadeInOutScene.h
+        includes/Objects/ParticleEngine.h
+        )
 
 
 set(IMGUI_FILES

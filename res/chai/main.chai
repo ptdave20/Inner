@@ -1,6 +1,5 @@
+include("chai/particles/fountain.chai");
 window_openConfig("json/main.json");
-
-
 
 var mainMenu = MenuScene();
 mainMenu.setName("Main Menu");
@@ -25,12 +24,12 @@ if(mainMenu.loadFont("horror_font","./fonts/quiet_horror_story.ttf")) {
             // Options
         }
         if(opt == 2) {
-            print("stop");
             stop();
         }
     });
 }
 
 var e = ParticleEngine(1000);
-
+e.setUpdateFunc(fountain_update);
+e.setRenewFunc(fountain_renew);
 window_pushScene(mainMenu);

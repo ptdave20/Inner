@@ -5,6 +5,7 @@
 #include "InnerWindow.h"
 
 InnerWindow::InnerWindow() {
+    std::srand(std::time(nullptr));
     bind();
 }
 
@@ -18,7 +19,8 @@ void InnerWindow::bind() {
     chai.add(chaiscript::fun(&InnerWindow::push_scene,this),"window_pushScene");
     chai.add(chaiscript::fun(&InnerWindow::pop_scene,this),"window_popScene");
     chai.add(chaiscript::fun(&InnerWindow::stop, this), "stop");
-    chai.add(chaiscript::fun(&InnerWindow::eval,this),"eval");
+    chai.add(chaiscript::fun(&InnerWindow::eval, this), "include");
+    chai.add(chaiscript::fun([]() { return std::rand(); }), "rand");
     chai.add(BaseObject::Library());
     chai.add(Scene::Library());
     chai.add(MenuScene::Library());

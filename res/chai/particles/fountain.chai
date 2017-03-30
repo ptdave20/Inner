@@ -1,0 +1,15 @@
+def fountain_update(p,delta) {
+    p.life = p.life - (delta*p.decay);
+    p.a = p.life;
+    p.posX = p.posX + (p.vectorX * delta);
+    p.posY = p.posY + (p.vectorY * delta);
+}
+
+def fountain_renew(p) {
+    p.life = rand()%100+1;
+    p.decay = rand()%10+1;
+    p.posX = 0;
+    p.posY = 0;
+    p.vectorX = rand()%10-5;
+    p.vectorY = rand()%20;
+}

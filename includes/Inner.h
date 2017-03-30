@@ -34,6 +34,8 @@
 #include <string>
 #include <ios>
 #include <locale>
+#include <ctime>
+#include <cstdlib>
 
 // INNER INCLUDES
 #include "typedefs.h"
