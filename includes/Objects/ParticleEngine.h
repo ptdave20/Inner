@@ -14,6 +14,7 @@ public:
     float life;
     float decay;
     float r, g, b, a;
+    float rotation;
 
     Particle() {
         r = 0;
@@ -26,6 +27,7 @@ public:
         posY = 0;
         life = 0;
         decay = 0;
+        rotation = 0;
     }
 };
 
@@ -52,7 +54,8 @@ public:
                 .add(chaiscript::fun(&Particle::r), "r")
                 .add(chaiscript::fun(&Particle::g), "g")
                 .add(chaiscript::fun(&Particle::b), "b")
-                .add(chaiscript::fun(&Particle::a), "a");
+                .add(chaiscript::fun(&Particle::a), "a")
+                .add(chaiscript::fun(&Particle::rotation), "rotation");
         return ret;
     }
 
