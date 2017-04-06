@@ -35,18 +35,19 @@ public:
 
         ret->add(chaiscript::user_type<Resources>(),"Resources")
                 .add(chaiscript::constructor<Resources()>(),"Resources")
-                .add(chaiscript::fun(&Resources::loadFont),"loadFont")
                 .add(chaiscript::fun(&Resources::getFont),"getFont");
+
+        ret->add(chaiscript::base_class<TextureResources, Resources>());
 
         ret->add(chaiscript::user_type<Scene>(),"Scene")
                 .add(chaiscript::constructor<Scene()>(),"Scene")
                 .add(chaiscript::fun(&Scene::loadFont),"loadFont")
                 .add(chaiscript::fun(&Scene::loadSfx),"loadSfx")
-                .add(chaiscript::fun(&Scene::loadTexture),"loadTexture")
                 .add(chaiscript::fun(&Scene::setUpdate),"setUpdate")
                 .add(chaiscript::fun(&Scene::addLayer),"addLayer")
                 .add(chaiscript::fun(&Scene::addEntity),"addEntity");
         ret->add(chaiscript::base_class<BaseObject,Scene>());
+        ret->add(chaiscript::base_class<TextureResources, Scene>());
         ret->add(chaiscript::base_class<Resources,Scene>());
         return ret;
     }

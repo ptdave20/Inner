@@ -11,7 +11,7 @@
 class MenuScene : public Scene {
 private:
     std::vector<sf::Text> menuOptions;
-    std::function<void(int)> selectedFunc;
+    std::function<void(int)> selectedFunc, mouseOverFunc, mouseLeaveFunc;
     unsigned int selectedOption;
     sf::Font normalFont,selectedFont;
     sf::Color normalColor,selectedColor;
@@ -35,6 +35,8 @@ public:
                 .add(chaiscript::fun(&MenuScene::setSelectedFontSize),"setSelectedFontSize")
                 .add(chaiscript::fun(&MenuScene::setSelectedFont), "setSelectedFont")
                 .add(chaiscript::fun(&MenuScene::setSelectedFunction), "setSelectedFunction")
+                .add(chaiscript::fun(&MenuScene::setMouseLeaveFunction), "setMouseLeaveFunction")
+                .add(chaiscript::fun(&MenuScene::setMouseOverFunction), "setMouseOverFunction")
                 .add(chaiscript::fun(&MenuScene::setVAlign), "setVAlign")
                 .add(chaiscript::fun(&MenuScene::getVAlign), "getVAlign")
                 .add(chaiscript::fun(&MenuScene::setHAlign), "setHAlign")
@@ -97,6 +99,15 @@ public:
     void setSelectedFunction(std::function<void(int)> f) {
         selectedFunc = f;
     }
+
+    void setMouseOverFunction(std::function<void(int)> f) {
+        mouseOverFunc = f;
+    }
+
+    void setMouseLeaveFunction(std::function<void(int)> f) {
+        mouseLeaveFunc = f;
+    }
+
 
     unsigned int totalMenuOptions() const {
         return menuOptions.size();
@@ -193,12 +204,18 @@ public:
                     menuOptions[i].setColor(selectedColor);
                     menuOptions[i].setCharacterSize(selectedSize);
                     selectedOption = i;
+                    if (mouseOverFunc)
+                        mouseOverFunc(selectedOption);
                 } else if (!menuOptions[i].getGlobalBounds().contains(m)) {
                     menuOptions[i].setFont(normalFont);
                     menuOptions[i].setColor(normalColor);
                     menuOptions[i].setCharacterSize(normalSize);
-                    if (i == selectedOption)
+                    if (i == selectedOption) {
                         selectedOption = -1;
+                        if (mouseLeaveFunc)
+                            mouseLeaveFunc(i);
+                    }
+
                 }
             }
             position();

@@ -3,6 +3,7 @@ def fountain_update(p,delta) {
     p.a = p.life;
     p.posX = p.posX + (p.vectorX * delta);
     p.posY = p.posY + (p.vectorY * delta);
+    p.rotation = p.rotation + (p.vectorRot * delta);
 }
 
 def fountain_renew(p) {

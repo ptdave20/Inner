@@ -21,6 +21,7 @@ void InnerWindow::bind() {
     chai.add(chaiscript::fun(&InnerWindow::stop, this), "stop");
     chai.add(chaiscript::fun(&InnerWindow::eval, this), "include");
     chai.add(chaiscript::fun([]() { return std::rand(); }), "rand");
+    chai.add(TextureResources::Library());
     chai.add(BaseObject::Library());
     chai.add(Scene::Library());
     chai.add(MenuScene::Library());

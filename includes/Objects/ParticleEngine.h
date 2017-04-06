@@ -15,6 +15,7 @@ public:
     float decay;
     float r, g, b, a;
     float rotation;
+    float vectorRot;
 
     Particle() {
         r = 0;
@@ -28,10 +29,11 @@ public:
         life = 0;
         decay = 0;
         rotation = 0;
+        vectorRot = 0;
     }
 };
 
-class ParticleEngine : public BaseObject {
+class ParticleEngine : public BaseObject, public TextureResources {
 private:
     std::vector<std::shared_ptr<Particle>> particles;
     std::function<void(std::shared_ptr<Particle>, const float &)> updateFunc;
@@ -55,7 +57,8 @@ public:
                 .add(chaiscript::fun(&Particle::g), "g")
                 .add(chaiscript::fun(&Particle::b), "b")
                 .add(chaiscript::fun(&Particle::a), "a")
-                .add(chaiscript::fun(&Particle::rotation), "rotation");
+                .add(chaiscript::fun(&Particle::rotation), "rotation")
+                .add(chaiscript::fun(&Particle::vectorRot), "vectorRot");
         return ret;
     }
 
