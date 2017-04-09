@@ -27,9 +27,12 @@ if(mainMenu.loadFont("horror_font","./fonts/quiet_horror_story.ttf")) {
             stop();
         }
     });
+    mainMenu.addLayer("fore");
 }
 
 var e = ParticleEngine(1000);
 e.setUpdateFunc(fountain_update);
 e.setRenewFunc(fountain_renew);
+mainMenu.addEntity("fore",e);
+
 window_pushScene(mainMenu);

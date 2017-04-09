@@ -20,7 +20,9 @@ void InnerWindow::bind() {
     chai.add(chaiscript::fun(&InnerWindow::pop_scene,this),"window_popScene");
     chai.add(chaiscript::fun(&InnerWindow::stop, this), "stop");
     chai.add(chaiscript::fun(&InnerWindow::eval, this), "include");
-    chai.add(chaiscript::fun([]() { return std::rand(); }), "rand");
+    chai.add(chaiscript::fun([](unsigned int min, unsigned int max) { return std::rand() % (max - min) + min; }),
+             "rand");
+    chai.add(Window::Library());
     chai.add(TextureResources::Library());
     chai.add(BaseObject::Library());
     chai.add(Scene::Library());

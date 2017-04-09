@@ -7,29 +7,35 @@
 #ifndef INNER_PARTICLEENGINE_H
 #define INNER_PARTICLEENGINE_H
 
-class Particle {
+class Particle : public sf::Sprite {
 public:
-    float vectorX, vectorY;
-    float posX, posY;
+    sf::Vector2f vector;
     float life;
     float decay;
-    float r, g, b, a;
     float rotation;
     float vectorRot;
 
     Particle() {
-        r = 0;
-        g = 0;
-        b = 0;
-        a = 0;
-        vectorX = 0;
-        vectorY = 0;
-        posX = 0;
-        posY = 0;
         life = 0;
         decay = 0;
         rotation = 0;
         vectorRot = 0;
+    }
+    const sf::Color &getColor() {
+        return sf::Sprite::getColor();
+    }
+    void setColor(const sf::Color &v) {
+        sf::Sprite::setColor(v);
+    }
+
+    const sf::Vector2f& getPosition() {
+        return sf::Sprite::getPosition();
+    }
+    void setPosition(const sf::Vector2f &v) {
+        sf::Sprite::setPosition(v);
+    }
+    void setTexture(const sf::Texture &v) {
+        sf::Sprite::setTexture(v);
     }
 };
 
@@ -44,39 +50,53 @@ public:
         ret->add(chaiscript::user_type<ParticleEngine>(), "ParticleEngine")
                 .add(chaiscript::constructor<ParticleEngine(unsigned int)>(), "ParticleEngine")
                 .add(chaiscript::fun(&ParticleEngine::setUpdateFunc), "setUpdateFunc")
-                .add(chaiscript::fun(&ParticleEngine::setRenewFunc), "setRenewFunc");
+                .add(chaiscript::fun(&ParticleEngine::setRenewFunc), "setRenewFunc")
+                .add(chaiscript::fun(&ParticleEngine::setParticleTexture),"setParticleTexture");
         ret->add(chaiscript::base_class<BaseObject, ParticleEngine>());
         ret->add(chaiscript::user_type<Particle>(), "Particle")
                 .add(chaiscript::fun(&Particle::decay), "decay")
                 .add(chaiscript::fun(&Particle::life), "life")
-                .add(chaiscript::fun(&Particle::vectorX), "vectorX")
-                .add(chaiscript::fun(&Particle::vectorY), "vectorY")
-                .add(chaiscript::fun(&Particle::posX), "posX")
-                .add(chaiscript::fun(&Particle::posY), "posY")
-                .add(chaiscript::fun(&Particle::r), "r")
-                .add(chaiscript::fun(&Particle::g), "g")
-                .add(chaiscript::fun(&Particle::b), "b")
-                .add(chaiscript::fun(&Particle::a), "a")
+                .add(chaiscript::fun(&Particle::vector), "vector")
+                .add(chaiscript::fun(&Particle::getPosition), "getPosition")
+                .add(chaiscript::fun(&Particle::setPosition), "setPosition")
+                .add(chaiscript::fun(&Particle::getColor), "getColor")
+                .add(chaiscript::fun(&Particle::setColor), "setColor")
                 .add(chaiscript::fun(&Particle::rotation), "rotation")
                 .add(chaiscript::fun(&Particle::vectorRot), "vectorRot");
+        ret->add(chaiscript::base_class<TextureResources,ParticleEngine>());
         return ret;
     }
 
     void update(const float &time) override {
+
         for (auto &p : particles) {
-            if ((*p).life <= 0) {
-                renewFunc(p);
+            if (p->life <= 0) {
+                if(renewFunc) {
+                    renewFunc(p);
+                }
+
             }
-            updateFunc(p, time);
+            if(updateFunc) {
+                updateFunc(p, time);
+            }
+
         }
     }
 
+    void setParticleTexture(Particle &p, std::string name){
+        p.setTexture(getTexture(name));
+    }
+
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
-        BaseObject::draw(target, states);
+        for(const auto p : particles) {
+            target.draw(*p,states);
+        }
     }
 
     ParticleEngine(unsigned int size) : particles(size) {
-
+        for(auto i=0; i<size; i++) {
+            particles[i] = std::make_shared<Particle>();
+        }
     }
 
     void setUpdateFunc(std::function<void(std::shared_ptr<Particle>, const float &)> update) {

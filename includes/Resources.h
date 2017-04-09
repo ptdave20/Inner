@@ -24,12 +24,16 @@ public:
     }
 
     sf::Texture &getTexture(std::string v) {
+        return *textures[v];
+    }
+
+    std::shared_ptr<sf::Texture> getTextureShared(std::string v) {
         return textures[v];
     }
 
     bool loadTexture(std::string name, std::string path) {
-        sf::Texture t;
-        if (t.loadFromFile(path)) {
+        auto t = std::make_shared<sf::Texture>(sf::Texture());
+        if (t->loadFromFile(path)) {
             textures[name] = t;
             return true;
         }
@@ -37,7 +41,7 @@ public:
     }
 
 private:
-    std::map<std::string, sf::Texture> textures;
+    std::map<std::string, std::shared_ptr<sf::Texture>> textures;
 };
 
 class Resources : public TextureResources {
