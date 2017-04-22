@@ -20,6 +20,7 @@ public:
         decay = 0;
         rotation = 0;
         vectorRot = 0;
+        setColor(sf::Color::White);
     }
     const sf::Color &getColor() {
         return sf::Sprite::getColor();
@@ -27,7 +28,6 @@ public:
     void setColor(const sf::Color &v) {
         sf::Sprite::setColor(v);
     }
-
     const sf::Vector2f& getPosition() {
         return sf::Sprite::getPosition();
     }
@@ -37,13 +37,20 @@ public:
     void setTexture(const sf::Texture &v) {
         sf::Sprite::setTexture(v);
     }
+
+    void update(const float time) {
+        auto p = getPosition();
+        p += vector * time;
+        setPosition(p);
+        life -= decay * time;
+    }
 };
 
 class ParticleEngine : public BaseObject, public TextureResources {
 private:
-    std::vector<std::shared_ptr<Particle>> particles;
-    std::function<void(std::shared_ptr<Particle>, const float &)> updateFunc;
-    std::function<void(std::shared_ptr<Particle>)> renewFunc;
+    std::vector<Particle> particles;
+    std::function<void(Particle &, const float &)> updateFunc;
+    std::function<void(Particle &)> renewFunc;
 public:
     static auto Library() {
         auto ret = std::make_shared<chaiscript::Module>();
@@ -62,7 +69,8 @@ public:
                 .add(chaiscript::fun(&Particle::getColor), "getColor")
                 .add(chaiscript::fun(&Particle::setColor), "setColor")
                 .add(chaiscript::fun(&Particle::rotation), "rotation")
-                .add(chaiscript::fun(&Particle::vectorRot), "vectorRot");
+                .add(chaiscript::fun(&Particle::vectorRot), "vectorRot")
+                .add(chaiscript::fun(&Particle::update), "update");
         ret->add(chaiscript::base_class<TextureResources,ParticleEngine>());
         return ret;
     }
@@ -70,7 +78,7 @@ public:
     void update(const float &time) override {
 
         for (auto &p : particles) {
-            if (p->life <= 0) {
+            if (p.life <= 0) {
                 if(renewFunc) {
                     renewFunc(p);
                 }
@@ -83,27 +91,28 @@ public:
         }
     }
 
-    void setParticleTexture(Particle &p, std::string name){
-        p.setTexture(getTexture(name));
+    void setParticleTexture(std::string name) {
+        for (auto &p : particles)
+            p.setTexture(getTexture(name));
     }
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
-        for(const auto p : particles) {
-            target.draw(*p,states);
+        for (const auto &p : particles) {
+            target.draw(p, states);
         }
     }
 
     ParticleEngine(unsigned int size) : particles(size) {
         for(auto i=0; i<size; i++) {
-            particles[i] = std::make_shared<Particle>();
+            particles[i] = Particle();
         }
     }
 
-    void setUpdateFunc(std::function<void(std::shared_ptr<Particle>, const float &)> update) {
+    void setUpdateFunc(std::function<void(Particle &, const float &)> update) {
         this->updateFunc = update;
     }
 
-    void setRenewFunc(std::function<void(std::shared_ptr<Particle>)> renew) {
+    void setRenewFunc(std::function<void(Particle &)> renew) {
         this->renewFunc = renew;
     }
 };

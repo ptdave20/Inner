@@ -1,9 +1,6 @@
 def fountain_update(p,delta) {
     p.life = p.life - (delta*p.decay);
-    var pos = p.getPosition();
-    pos.x += p.vector.x * delta;
-    //pos.y = pos.y + p.vector.y * delta;
-    p.setPosition(pos);
+    p.update(delta);
     var c = p.getColor();
     //c.a = p.life;
     p.setColor(c);
@@ -15,4 +12,6 @@ def fountain_renew(p) {
     p.decay = rand(1,10);
     p.vector.x = rand(-5,5);
     p.vector.y = rand(0,20);
+    var c = p.getColor();
+    c.a = 128;
 }

@@ -71,7 +71,6 @@ public:
     }
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
-        std::cout << "render" << std::endl;
         auto delta = transform * states.transform;
 
         for(auto lItr = entities.begin(); lItr!=entities.end(); lItr++) {

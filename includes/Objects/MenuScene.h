@@ -193,6 +193,7 @@ public:
         for(auto i = 0; i<menuOptions.size(); i++) {
             target.draw(menuOptions[i],states);
         }
+        Scene::draw(target, states);
     }
 
     void handleEvent(sf::Event &event) override {
