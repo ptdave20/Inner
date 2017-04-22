@@ -3,15 +3,14 @@ def fountain_update(p,delta) {
     p.update(delta);
     var c = p.getColor();
     //c.a = p.life;
-    p.setColor(c);
+    p.setColor(255,255,255,p.life);
     p.rotation = p.rotation + (p.vectorRot * delta);
 }
 
 def fountain_renew(p) {
-    p.life = rand(1,100);
+    p.life = rand(1,255);
     p.decay = rand(1,10);
     p.vector.x = rand(-5,5);
     p.vector.y = rand(0,20);
-    var c = p.getColor();
-    c.a = 128;
+    p.setColor(255,255,255,128);
 }

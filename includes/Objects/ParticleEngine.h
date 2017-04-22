@@ -20,13 +20,30 @@ public:
         decay = 0;
         rotation = 0;
         vectorRot = 0;
-        setColor(sf::Color::White);
+        sf::Sprite::setColor(sf::Color::White);
     }
     const sf::Color &getColor() {
         return sf::Sprite::getColor();
     }
-    void setColor(const sf::Color &v) {
-        sf::Sprite::setColor(v);
+
+    void setColor(int r, int g, int b, int a) {
+        sf::Sprite::setColor(sf::Color(r, g, b, a));
+    }
+
+    int getR() {
+        return getColor().r;
+    }
+
+    int getG() {
+        return getColor().g;
+    }
+
+    int getB() {
+        return getColor().b;
+    }
+
+    int getA() {
+        return getColor().a;
     }
     const sf::Vector2f& getPosition() {
         return sf::Sprite::getPosition();
@@ -68,6 +85,10 @@ public:
                 .add(chaiscript::fun(&Particle::setPosition), "setPosition")
                 .add(chaiscript::fun(&Particle::getColor), "getColor")
                 .add(chaiscript::fun(&Particle::setColor), "setColor")
+                .add(chaiscript::fun(&Particle::getR), "r")
+                .add(chaiscript::fun(&Particle::getR), "g")
+                .add(chaiscript::fun(&Particle::getR), "b")
+                .add(chaiscript::fun(&Particle::getR), "a")
                 .add(chaiscript::fun(&Particle::rotation), "rotation")
                 .add(chaiscript::fun(&Particle::vectorRot), "vectorRot")
                 .add(chaiscript::fun(&Particle::update), "update");

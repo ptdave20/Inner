@@ -22,11 +22,6 @@ public:
         using namespace chaiscript;
         ModulePtr ret = std::make_shared<Module>();
 
-        ret->add(chaiscript::user_type<sf::Color>(), "Color")
-                .add(chaiscript::fun(&sf::Color::r),"r")
-                .add(chaiscript::fun(&sf::Color::g),"g")
-                .add(chaiscript::fun(&sf::Color::b),"b")
-                .add(chaiscript::fun(&sf::Color::a),"a");
         ret->add(chaiscript::user_type<sf::Vector2f>(), "Vector")
                 .add(chaiscript::fun(&sf::Vector2f::x),"x")
                 .add(chaiscript::fun(&sf::Vector2f::y),"y");
