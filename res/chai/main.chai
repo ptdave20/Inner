@@ -30,12 +30,13 @@ if(mainMenu.loadFont("horror_font","./fonts/quiet_horror_story.ttf")) {
     mainMenu.addLayer("fore");
 }
 
-var e = ParticleEngine(3);
+var e = ParticleEngine(10);
 e.loadTexture("fog","./gfx/fog.png");
 e.setUpdateFunc(fountain_update);
 e.setRenewFunc(fountain_renew);
 e.setPosition(200,200);
 e.setParticleTexture("fog");
+e.setParticleScale(0.5,0.5);
 mainMenu.addEntity("fore",e);
 
 window_pushScene(mainMenu);

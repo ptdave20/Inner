@@ -20,7 +20,7 @@ public:
         decay = 0;
         rotation = 0;
         vectorRot = 0;
-        sf::Sprite::setColor(sf::Color::White);
+        setColor(255, 255, 255, 128);
     }
     const sf::Color &getColor() {
         return sf::Sprite::getColor();
@@ -75,7 +75,8 @@ public:
                 .add(chaiscript::constructor<ParticleEngine(unsigned int)>(), "ParticleEngine")
                 .add(chaiscript::fun(&ParticleEngine::setUpdateFunc), "setUpdateFunc")
                 .add(chaiscript::fun(&ParticleEngine::setRenewFunc), "setRenewFunc")
-                .add(chaiscript::fun(&ParticleEngine::setParticleTexture),"setParticleTexture");
+                .add(chaiscript::fun(&ParticleEngine::setParticleTexture), "setParticleTexture")
+                .add(chaiscript::fun(&ParticleEngine::setParticleScale), "setParticleScale");
         ret->add(chaiscript::base_class<BaseObject, ParticleEngine>());
         ret->add(chaiscript::user_type<Particle>(), "Particle")
                 .add(chaiscript::fun(&Particle::decay), "decay")
@@ -102,13 +103,12 @@ public:
             if (p.life <= 0) {
                 if(renewFunc) {
                     renewFunc(p);
+                    p.setPosition(getPosition());
                 }
-
-            }
-            if(updateFunc) {
+            } else if (updateFunc) {
                 updateFunc(p, time);
+                p.setRotation(p.rotation);
             }
-
         }
     }
 
@@ -119,7 +119,13 @@ public:
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
         for (const auto &p : particles) {
-            target.draw(p, states);
+            target.draw(p, sf::BlendAdd);
+        }
+    }
+
+    void setParticleScale(float x, float y) {
+        for (auto &p : particles) {
+            p.setScale(x, y);
         }
     }
 
